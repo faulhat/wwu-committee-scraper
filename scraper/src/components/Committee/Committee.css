@@ -1,0 +1,47 @@
+.Committee {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%; /* Full width */
+  cursor: pointer;
+  margin: 0 0 1rem 0; /* Adjusted margin */
+  padding: 1rem; /* Optional padding inside */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow to give the lifted effect */
+  background-color: hsl(0, 0%, 98%); /* Light background for the committee card */
+  border-radius: 8px; /* Rounded corners */
+}
+
+.committee-title {
+  color: white;
+  background-color: #003F87; /* Blue background for title */
+  padding: 4px;
+  border-radius: 4px;
+  text-align: Left;
+  font-size: 25px; /* Adjusted to match your h2 size */
+  font-weight: 900; /* Bold text */
+  margin-bottom: 10px;
+  font-family: Trueno, sans-serif;
+}
+
+.committee-description {
+  color: #333; /* Black text for description */
+  font-size: 0.88rem; /* Adjusted to match your p size */
+  font-weight: 300; /* Light text */
+  line-height: 1rem; /* Adjusted line height */
+  margin-bottom: 10px;
+}
+
+.committee-bullet-points {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.bullet-point {
+  color: black; /* Black text for bullet points */
+  font-size: 0.88rem; /* Adjusted to match your p size */
+  font-weight: 300; /* Light text */
+  line-height: 1rem; /* Adjusted line height */
+  margin-bottom: 5px;
+  text-align: left;
+}

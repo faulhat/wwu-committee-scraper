@@ -1,0 +1,49 @@
+.footer {
+  background-color: #003F87; /* Blue background */
+  color: white; /* White text */
+  padding: 2em 1rem; /* Padding for the footer */
+  font-size: 15px; /* Smaller font size */
+  font-weight: bold; /* Bold text */
+  text-align: center; /* Center align text */
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+  align-items: center; /* Center content horizontally and vertically */
+  justify-content: center; /* Center content vertically */
+  min-height: 150px; /* Optional: Set a minimum height */
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+  gap: 1px; /* Space between links */
+  margin-top: 0; /* Remove extra margin at the top */
+}
+
+.footer-link {
+  color: white; /* White text */
+  /* text-decoration: underline; /* Add underline */
+  text-transform: uppercase; /* All caps */
+  transition: color 0.3s ease; /* Smooth hover effect */
+  transform: scale(0.8); /* Shrink the text */
+  display: inline-block; /* Ensure transform works correctly */
+  font-weight: bold; /* Bold text */
+
+}
+
+.footer-link:hover {
+  color: #BAD80A; /* Gold color on hover */
+}
+
+.footer-image-container {
+  display: flex;
+  justify-content: center; /* Center the image horizontally */
+  margin-top: 5px; /* Space between text and image */
+  margin-bottom: 15px; /* Space between text and image */
+
+}
+
+.footer-image {
+  max-width: 80%; /* Ensure the image doesn't overflow its container */
+  height: auto; /* Maintain aspect ratio */
+  width: 150px; /* Adjust the width as needed */
+}

@@ -1,0 +1,223 @@
+@import "tailwindcss";
+
+/* Define the Trueno font */
+@font-face {
+  font-family: 'Trueno';
+  src: url('../../assets/fonts/TruenoBd.otf') format('opentype');
+  font-weight: 700; /* Bold weight */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Trueno';
+  src: url('../../assets/fonts/TruenoBlk.otf') format('opentype');
+  font-weight: 700; /* Bold weight */
+  font-style: normal;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* Universal Styl/* Universal Styles */
+
+html {
+  font-size: 18px;
+}
+
+@media only screen and (max-width: 560px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+input:focus {
+  outline: none;
+}
+
+/* Reusable Component - Image Container */
+
+.image-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  background: #000;
+}
+
+.image-container img {
+  width: 100%;
+}
+
+/* App Styles */
+
+.App {
+  font-family: 'Work Sans', sans-serif;
+  position: relative;
+}
+
+h1 {
+  padding: .66rem 0;
+  text-align: center;
+  background-color: #003F87;
+  font-family: Poppins, sans-serif;
+  font-size: 1.8rem;
+  color: #fff;
+  width: 100%; /* Full width */
+  height: 60px; /* Fixed height */
+  display: flex;
+  align-items: center; /* Vertically center the content */
+  justify-content: flex-start; /* Align content to the left */
+  margin: 0; /* Remove default margin */
+  position: relative; /* Needed for absolute positioning of the logo */
+}
+
+.header-logo {
+  position: absolute; /* Position the logo absolutely within the header */
+  left: 20px; /* Distance from the left edge */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust for exact vertical centering */
+  height: 50px; /* Adjust the height of the logo */
+  width: auto; /* Maintain aspect ratio */
+}
+
+html {
+  font-size: 18px;
+}
+
+@media only screen and (max-width: 560px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+input:focus {
+  outline: none;
+}
+
+/* Reusable Component - Image Container */
+
+.image-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  background: #000;
+}
+
+.image-container img {
+  width: 100%;
+}
+
+/* App Styles */
+
+.App {
+  font-family: 'Work Sans', sans-serif;
+}
+
+h1 {
+  padding: .66rem 0;
+  text-align: center;
+  background-color: #003F87;
+  font-family: Poppins, sans-serif;
+  font-size: 1.8rem;
+  color: #fff;
+}
+
+.App {
+  text-align: center;
+}
+
+.full-page {
+  width: 100%;
+  height: 100vh; /* Full viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #ccc; /* Optional: Add a border between businesses */
+}
+
+.Business {
+  width: 80%;
+  max-width: 800px;
+  text-align: left;
+}
+
+.Business-information {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.Business-address, .Business-reviews {
+  width: 45%;
+}
+
+
+.committee-main-title {
+  color: #003F87; /* Blue text */
+  font-size: 2rem; /* Large font size */
+  font-weight: bold; /* Bold text */
+  font-weight: 900;
+  text-align: left; /* Center the title */
+  margin: 2rem 0 1rem 0; /* Add space above and below the title */
+  font-family: Trueno, sans-serif;
+  background-color: hsl(0, 0%, 98%); /* Light background for the committee card */
+
+
+}
+
+/* Styles for the right images container */
+.header-right-images {
+  position: absolute; /* Position the container absolutely within the header */
+  right: 20px; /* Distance from the right edge */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust for exact vertical centering */
+  display: flex; /* Display images in a row */
+  gap: 5px; /* Space between images */
+}
+
+/* Styles for each individual image */
+.header-icon {
+  height: 50px; /* Adjust the height of the images */
+  width: auto; /* Maintain aspect ratio */
+}

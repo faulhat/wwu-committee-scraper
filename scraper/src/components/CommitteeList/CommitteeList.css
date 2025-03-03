@@ -1,0 +1,7 @@
+.CommitteeList {
+  display: flex;
+  flex-direction: column; /* Stack committees vertically */
+  gap: 1rem; /* Space between committees */
+  width: 100%; /* Full width */
+  padding: 0; /* Remove padding to stretch to edges */
+}

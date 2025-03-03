@@ -1,0 +1,13 @@
+{
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.0.1"
+    },
+    "dependencies": {
+        "react-hot-toast": "^2.5.1"
+    }
+}
