@@ -16,17 +16,23 @@ def index():
 
 # Search for JSON data.
 @app.route('/data/<path:subpath>', methods=["GET", "POST"])
-
-# def load_json_file(filename):
-    
-   # with open(filename, "r") as f:
-   #     data = json.load(f)
-   # return data
-
-@app.route('/', methods=["GET", "POST"])
-def get_data():
+def get_path():
     if not folder_exists('/data'):
         return redirect(url_for('404_error'))
+    return True
+
+def load_json_file(filename):
+   with open(filename, "r") as f:
+       data = json.load(f)
+   return data
+
+if (get_path() == True):
+    json_data = load_json_file('/data/*.json')
+
+# @app.route('/', methods=["GET", "POST"])
+# def get_data():
+#     if not folder_exists('/data'):
+#         return redirect(url_for('404_error'))
     
 
 
