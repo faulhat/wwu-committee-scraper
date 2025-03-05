@@ -1,6 +1,6 @@
 import json
 import os
-from flask import Flask, render_template, jsonify, redirect, url_for
+from flask import Flask, send_file, send_from_directory, redirect, url_for
 
 # Getting the app started
 app = Flask(__name__)
@@ -9,25 +9,20 @@ app = Flask(__name__)
 def folder_exists(path):
     return os.path.isdir(path)
 
-def get_path():
-    if not folder_exists('/data'):
-        return redirect(url_for('404_error'))
-    return True
 
 # Display static HTML.
 @app.route('/')
 def index():
-    return render_template("index.html")
+    return send_file("../index.html")
 
 # Search for JSON data.
-@app.route('/data/<path:subpath>', methods=["GET", "POST"])
-def load_json_file(filename):
-   with open(filename, "r") as f:
-       data = json.load(f)
-   return data
-
-if (get_path() == True):
-    json_data = load_json_file('/data/*.json')
+@app.route('/data/<path:subpath>')
+def data(subpath):
+    if not folder_exists("data/"):
+        return redirect(url_for("not_found"))
+    else:
+        return send_from_directory("data/", subpath)
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
