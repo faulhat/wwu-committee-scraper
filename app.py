@@ -1,6 +1,6 @@
 import json
 import os
-from flask import Flask, render_template, jsonify, abort, request, redirect, url_for
+from flask import Flask, render_template, jsonify, redirect, url_for
 
 # Getting the app started
 app = Flask(__name__)
@@ -13,6 +13,7 @@ def get_path():
     if not folder_exists('/data'):
         return redirect(url_for('404_error'))
     return True
+
 # Display static HTML.
 @app.route('/')
 def index():
@@ -27,12 +28,6 @@ def load_json_file(filename):
 
 if (get_path() == True):
     json_data = load_json_file('/data/*.json')
-
-# @app.route('/', methods=["GET", "POST"])
-# def get_data():
-#     if not folder_exists('/data'):
-#         return redirect(url_for('404_error'))
-
 
 if __name__ == "__main__":
     app.run(debug=True)
