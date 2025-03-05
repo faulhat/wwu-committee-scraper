@@ -9,6 +9,10 @@ app = Flask(__name__)
 def folder_exists(path):
     return os.path.isdir(path)
 
+def get_path():
+    if not folder_exists('/data'):
+        return redirect(url_for('404_error'))
+    return True
 # Display static HTML.
 @app.route('/')
 def index():
@@ -16,11 +20,6 @@ def index():
 
 # Search for JSON data.
 @app.route('/data/<path:subpath>', methods=["GET", "POST"])
-def get_path():
-    if not folder_exists('/data'):
-        return redirect(url_for('404_error'))
-    return True
-
 def load_json_file(filename):
    with open(filename, "r") as f:
        data = json.load(f)
@@ -33,8 +32,6 @@ if (get_path() == True):
 # def get_data():
 #     if not folder_exists('/data'):
 #         return redirect(url_for('404_error'))
-    
-
 
 
 if __name__ == "__main__":
