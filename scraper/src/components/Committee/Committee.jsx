@@ -1,10 +1,10 @@
 import React from 'react';
-import './Committee.css'; // Updated CSS file
+import './Committee.css';
 
-function Committee({ committee }) {
+function Committee({ committee, showTitle }) {
   return (
     <div className="Committee">
-      <h2 className="committee-title">{committee.title}</h2>
+      {showTitle && <h2 className="committee-title">{committee.title}</h2>}
       <p className="committee-description">{committee.description}</p>
       <ul className="committee-bullet-points">
         {committee.bulletPoints.map((point, index) => (
