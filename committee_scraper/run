@@ -1,0 +1,5 @@
+#!/bin/bash
+
+.env/bin/python committee_scraper.py \
+	&& echo "Search complete! Check data.json and links.txt for results."
+
