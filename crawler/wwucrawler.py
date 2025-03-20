@@ -109,7 +109,7 @@ class Crawler:
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser(prog="Web Crawler")
+    parser = ArgumentParser(prog="wwucrawler.py")
     parser.add_argument("-o", "--ofile", nargs="?", help="output file")
     parser.add_argument("-d", "--depth", default=4, type=int, help="max search depth")
     parser.add_argument("-u", "--unbounded", action="store_true", help="disable max search depth")
