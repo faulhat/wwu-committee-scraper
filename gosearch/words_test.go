@@ -6,24 +6,43 @@ import (
 	"testing"
 )
 
-const repetitive_expected map[string]int = map[string]int{
-	"title":     7,
-	"head":      2,
-	"paragraph": 3,
-	"text":      3,
-	"link":      2,
+func TestHistogram(t *testing.T) {
+	s := "!?a a, b b aa ..b a!?"
+	expected := Histogram{
+		"a":  3,
+		"b":  3,
+		"aa": 1,
+	}
+
+	result := make(Histogram)
+	AddToHistogram(s, &result)
+	if !reflect.DeepEqual(result, expected) {
+		t.Errorf("Didn't get expected histogram for input string. Got: %v", result)
+	}
 }
 
-func TestParser(t *testing.T) {
-	file, err = os.Open("testdata/repetitive.html")
+func TestParseFile(t *testing.T) {
+	repetitive_expected := Histogram{
+		"title":     3,
+		"head":      2,
+		"paragraph": 3,
+		"text":      3,
+		"link":      2,
+	}
+
+	file, err := os.Open("testdata/repetitive.html")
 	if err != nil {
 		t.Fatalf("Couldn't open file: %v", err)
 	}
 
 	defer file.Close()
 
-	result := getAllWords(file)
+	result, err := GetPageWords(file)
+	if err != nil {
+		t.Fatalf("Couldn't extract words: %v", err)
+	}
+
 	if !reflect.DeepEqual(result, repetitive_expected) {
-		t.Errorf("Didn't get expected word counts for repetitive.html. Got: %v", result)
+		t.Errorf("Didn't get expected histogram for repetitive.html. Got: %v", result)
 	}
 }
