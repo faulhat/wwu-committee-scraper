@@ -2,7 +2,6 @@ package main
 
 import (
 	"golang.org/x/net/html"
-	"io"
 	"regexp"
 	"strings"
 )
@@ -21,15 +20,10 @@ func AddToHistogram(s string, into *Histogram) {
 	}
 }
 
-func GetPageWords(r io.Reader) (Histogram, error) {
-	doc, err := html.Parse(r)
-	if err != nil {
-		return nil, err
-	}
-
+func GetPageWords(root *html.Node) Histogram {
 	plot := make(Histogram)
-	ExtractToHistogram(doc, &plot)
-	return plot, nil
+	ExtractToHistogram(root, &plot)
+	return plot
 }
 
 var ignoreTags = map[string]bool{
@@ -49,5 +43,26 @@ func ExtractToHistogram(n *html.Node, into *Histogram) {
 
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		ExtractToHistogram(c, into)
+	}
+}
+
+func GetPageLinks(root *html.Node) []string {
+	links := make([]string, 0)
+	ExtractLinks(root, &links)
+	return links
+}
+
+func ExtractLinks(n *html.Node, into *[]string) {
+	if n.Type == html.ElementNode && n.Data == "a" {
+		for _, attr := range n.Attr {
+			if attr.Key == "href" {
+				*into = append(*into, attr.Val)
+				break
+			}
+		}
+	}
+
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		ExtractLinks(c, into)
 	}
 }

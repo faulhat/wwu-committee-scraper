@@ -1,6 +1,7 @@
 package main
 
 import (
+	"golang.org/x/net/html"
 	"net/http"
 	"os"
 	"reflect"
@@ -15,10 +16,10 @@ func TestHistogram(t *testing.T) {
 		"aa": 1,
 	}
 
-	result := make(Histogram)
-	AddToHistogram(s, &result)
-	if !reflect.DeepEqual(result, expected) {
-		t.Errorf("Didn't get expected histogram for input string. Got: %v", result)
+	plot := make(Histogram)
+	AddToHistogram(s, &plot)
+	if !reflect.DeepEqual(plot, expected) {
+		t.Errorf("Didn't get expected histogram for input string. Got: %v", plot)
 	}
 }
 
@@ -37,13 +38,14 @@ func TestParseFile(t *testing.T) {
 	}
 	defer file.Close()
 
-	result, err := GetPageWords(file)
+	doc, err := html.Parse(file)
 	if err != nil {
-		t.Fatalf("Couldn't extract words: %v", err)
+		t.Fatalf("Couldn't parse HTML: %v", err)
 	}
 
-	if !reflect.DeepEqual(result, repetitive_expected) {
-		t.Errorf("Didn't get expected histogram for repetitive.html. Got: %v", result)
+	plot := GetPageWords(doc)
+	if !reflect.DeepEqual(plot, repetitive_expected) {
+		t.Errorf("Didn't get expected histogram for repetitive.html. Got: %v", plot)
 	}
 }
 
@@ -60,14 +62,39 @@ func TestWikipedia(t *testing.T) {
 		t.Errorf("Couldn't retrieve page. Got code %d.", res.StatusCode)
 	}
 
-	plot, err := GetPageWords(res.Body)
+	doc, err := html.Parse(res.Body)
 	if err != nil {
-		t.Fatalf("Couldn't generate histogram: %v", err)
+		t.Fatalf("Couldn't parse HTML: %v", err)
 	}
 
+	plot := GetPageWords(doc)
 	for _, word := range expected_words {
 		if plot[word] == 0 {
 			t.Errorf("Didn't find expected word: %v", word)
 		}
+	}
+}
+
+func TestLinks(t *testing.T) {
+	expected_links := []string{
+		"https://en.wikipedia.org/wiki/Greece",
+		"https://en.wikipedia.org/wiki/Oceanus",
+		"https://www.gutenberg.org/files/1658/1658-h/1658-h.htm",
+	}
+
+	file, err := os.Open("testdata/sample.html")
+	if err != nil {
+		t.Fatalf("Couldn't open file: %v", err)
+	}
+	defer file.Close()
+
+	doc, err := html.Parse(file)
+	if err != nil {
+		t.Fatalf("Couldn't parse HTML: %v", err)
+	}
+
+	links := GetPageLinks(doc)
+	if !reflect.DeepEqual(links, expected_links) {
+		t.Errorf("Didn't get expected links. Got: %v", links)
 	}
 }
