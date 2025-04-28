@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/http"
 	"os"
 	"reflect"
 	"testing"
@@ -34,7 +35,6 @@ func TestParseFile(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Couldn't open file: %v", err)
 	}
-
 	defer file.Close()
 
 	result, err := GetPageWords(file)
@@ -44,5 +44,30 @@ func TestParseFile(t *testing.T) {
 
 	if !reflect.DeepEqual(result, repetitive_expected) {
 		t.Errorf("Didn't get expected histogram for repetitive.html. Got: %v", result)
+	}
+}
+
+func TestWikipedia(t *testing.T) {
+	expected_words := []string{"wikipedia", "encyclopedia", "featured"}
+
+	res, err := http.Get("https://en.wikipedia.org/wiki/Main_Page")
+	if err != nil {
+		t.Fatalf("Couldn't retrieve page: %v", err)
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		t.Errorf("Couldn't retrieve page. Got code %d.", res.StatusCode)
+	}
+
+	plot, err := GetPageWords(res.Body)
+	if err != nil {
+		t.Fatalf("Couldn't generate histogram: %v", err)
+	}
+
+	for _, word := range expected_words {
+		if plot[word] == 0 {
+			t.Errorf("Didn't find expected word: %v", word)
+		}
 	}
 }
