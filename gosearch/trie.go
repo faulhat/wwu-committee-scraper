@@ -8,8 +8,13 @@ type TrieNode struct {
 	val int
 }
 
-func TrieFromList(init []string) *TrieNode {
-	return new(TrieNode)
+func TrieFromList(terms []string) *TrieNode {
+	n := new(TrieNode)
+	for _, term := range terms {
+		n.Add(term)
+	}
+
+	return n
 }
 
 func (n *TrieNode) ToString() string {
@@ -51,6 +56,7 @@ func (n *TrieNode) Add(s string) {
 func (n *TrieNode) put(s string, c int) {
 	if c == len(s) {
 		n.term = true
+		n.val++
 	} else {
 		if n.children[s[c]] == nil {
 			n.children[s[c]] = new(TrieNode)
@@ -60,8 +66,18 @@ func (n *TrieNode) put(s string, c int) {
 	}
 }
 
-func (n *TrieNode) Contains(s string) bool {
-	return false
+func (n *TrieNode) Get(s string) (int, bool) {
+	return n.find(s, 0)
 }
 
+func (n *TrieNode) find(s string, c int) (int, bool) {
+	if c == len(s) {
+		return n.val, n.term
+	}
 
+	if n.children[s[c]] == nil {
+		return 0, false
+	}
+
+	return n.children[s[c]].find(s, c + 1)
+}

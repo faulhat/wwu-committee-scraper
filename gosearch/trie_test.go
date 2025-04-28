@@ -40,7 +40,8 @@ func TestTrieMember(t *testing.T) {
 
 	trie := TrieFromList(words)
 	for _, word := range words {
-		if !trie.Contains(word) {
+		_, ok := trie.Get(word)
+		if !ok {
 			t.Errorf("Trie didn't contain expected word %v. Contents: %v", word, trie.ToString())
 		}
 	}
