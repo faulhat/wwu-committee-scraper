@@ -6,5 +6,14 @@ import (
 )
 
 func DBSetup(db *sql.DB) error {
-	return nil
+	_, err := db.Exec(`CREATE TABLE IF NOT EXISTS pages (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		url TEXT NOT NULL,
+		terms TEXT NOT NULL,
+		hist TEXT NOT NULL,
+		full_text TEXT NOT NULL,
+		retrieved TIMESTAMP
+	);`)
+
+	return err
 }
