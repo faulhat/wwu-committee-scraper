@@ -24,18 +24,40 @@ func setupTestDB(t *testing.T) *sql.DB {
 	return db
 }
 
-func TestDBAddPage1(t *testing.T) {
-	search_terms := []string{"hill", "hilly", "hills", "and hill"}
+var hilly_terms = []string{"hill", "hilly", "hills", "and hill"}
+var hilly_expected_terms = Histogram{
+	"hill":     5,
+	"hilly":    1,
+	"hills":    3,
+	"and hill": 1,
+}
 
-	e_terms := Histogram{
-		"hill":     5,
-		"hilly":    1,
-		"hills":    3,
-		"and hill": 1,
+var hilly_expected_text = "Hilly hills and hillsides on Hillsborough made our way to The Hill country "
+
+func TestNewPage(t *testing.T) {
+	path := "testdata/hillcountry.html"
+	file, err := os.Open(path)
+	if err != nil {
+		t.Fatalf("Couldn't open file: %v", err)
+	}
+	defer file.Close()
+
+	doc, err := html.Parse(file)
+	if err != nil {
+		t.Fatalf("Couldn't parse HTML: %v", err)
 	}
 
-	e_text := "Hilly hills and hillsides on Hillsborough made our way to The Hill country"
+	page := NewPage(path, doc, hilly_terms)
+	if page.Text != hilly_expected_text {
+		t.Errorf("Didn't get expected text from DB. Got: %v", page.Text)
+	}
 
+	if !reflect.DeepEqual(page.Terms, hilly_expected_terms) {
+		t.Errorf("Didn't get expected terms table from DB. Got: %v", page.Terms)
+	}
+}
+
+func TestDBAddPage1(t *testing.T) {
 	path := "testdata/hillcountry.html"
 	file, err := os.Open(path)
 	if err != nil {
@@ -51,21 +73,21 @@ func TestDBAddPage1(t *testing.T) {
 	db := setupTestDB(t)
 	defer db.Close()
 
-	err = DBAddPage(path, doc, search_terms)
+	err = DBAddPage(db, path, doc, hilly_terms)
 	if err != nil {
 		t.Fatalf("Couldn't add page to DB: %v", err)
 	}
 
-	page, err := DBGetPage(path)
+	page, err := DBGetPage(db, path)
 	if err != nil {
 		t.Fatalf("Couldn't retrieve page from DB: %v", err)
 	}
 
-	if page.Text != e_text {
+	if page.Text != hilly_expected_text {
 		t.Errorf("Didn't get expected text from DB. Got: %v", page.Text)
 	}
 
-	if !reflect.DeepEqual(page.Terms, e_terms) {
+	if !reflect.DeepEqual(page.Terms, hilly_expected_terms) {
 		t.Errorf("Didn't get expected terms table from DB. Got: %v", page.Terms)
 	}
 }
@@ -96,12 +118,12 @@ func TestDBAddPage2(t *testing.T) {
 	db := setupTestDB(t)
 	defer db.Close()
 
-	err = DBAddPage(path, doc, nil)
+	err = DBAddPage(db, path, doc, nil)
 	if err != nil {
 		t.Fatalf("Couldn't add page to DB: %v", err)
 	}
 
-	page, err := DBGetPage(path)
+	page, err := DBGetPage(db, path)
 	if err != nil {
 		t.Fatalf("Couldn't retrieve page from DB: %v", err)
 	}

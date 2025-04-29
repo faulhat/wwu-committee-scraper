@@ -5,6 +5,7 @@ import (
 	"errors"
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/net/html"
+	"strings"
 	"time"
 )
 
@@ -30,10 +31,20 @@ func DBSetup(db *sql.DB) error {
 	return err
 }
 
-func DBAddPage(url string, root *html.Node, terms []string) error {
+func DBAddPage(db *sql.DB, url string, root *html.Node, terms []string) error {
 	return errors.New("Not implemented")
 }
 
-func DBGetPage(url string) (*Page, error) {
+func NewPage(url string, root *html.Node, terms []string) *Page {
+	page := new(Page)
+	page.Url = url
+	page.Text = GetPageText(root)
+	page.Terms = *Search(terms, strings.ToLower(page.Text)).ToHistogram()
+	page.Hist = GetPageWords(root)
+
+	return page
+}
+
+func DBGetPage(db *sql.DB, url string) (*Page, error) {
 	return nil, errors.New("Not implemented")
 }
