@@ -11,7 +11,7 @@ type TrieNode struct {
 func TrieFromList(terms []string) *TrieNode {
 	n := new(TrieNode)
 	for _, term := range terms {
-		n.Add(term)
+		n.Set(term, 0)
 	}
 
 	return n
