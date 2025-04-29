@@ -26,3 +26,7 @@ func GetDomainSubdomain(url string) (string, string) {
 		return domain, subdomain
 	}
 }
+
+func StripQuery(url string) string {
+	return strings.SplitN(url, "?", 2)[0]
+}
