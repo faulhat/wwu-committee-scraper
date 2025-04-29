@@ -46,3 +46,27 @@ func TestTrieMember(t *testing.T) {
 		}
 	}
 }
+
+func TestTrieAdd(t *testing.T) {
+	var words = map[string]int{
+		"hey": 4,
+		"hi": 3,
+		"hello": 2,
+	}
+
+	trie := new(TrieNode)
+	for word, n := range words {
+		for i := 0; i < n; i++ {
+			trie.Add(word)
+		}
+	}
+
+	for word, n := range words {
+		v, ok := trie.Get(word)
+		if !ok {
+			t.Errorf("Trie didn't contain expected word %v.", word)
+		} else if v != n {
+			t.Errorf("Trie didn't contain expected value for word %v. Got %v", word, v)
+		}
+	}
+}
