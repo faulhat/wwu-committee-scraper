@@ -2,7 +2,7 @@ package main
 
 import (
 	"database/sql"
-	"errors"
+	"encoding/json"
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/net/html"
 	"strings"
@@ -25,14 +25,30 @@ func DBSetup(db *sql.DB) error {
 		terms TEXT NOT NULL,
 		hist TEXT NOT NULL,
 		full_text TEXT NOT NULL,
-		retrieved TIMESTAMP
+		retrieved TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	);`)
 
 	return err
 }
 
 func DBAddPage(db *sql.DB, url string, root *html.Node, terms []string) error {
-	return errors.New("Not implemented")
+	page := NewPage(url, root, terms)
+	terms_js, err := json.Marshal(page.Terms)
+	if err != nil {
+		return err
+	}
+
+	hist_js, err := json.Marshal(page.Hist)
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Exec(`INSERT INTO pages (url, terms, hist, full_text) VALUES (?, ?, ?, ?)`, page.Url, terms_js, hist_js, page.Text)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func NewPage(url string, root *html.Node, terms []string) *Page {
@@ -46,5 +62,25 @@ func NewPage(url string, root *html.Node, terms []string) *Page {
 }
 
 func DBGetPage(db *sql.DB, url string) (*Page, error) {
-	return nil, errors.New("Not implemented")
+	page := new(Page)
+	page.Url = url
+
+	var terms_js, hist_js string
+	row := db.QueryRow(`SELECT terms, hist, full_text FROM pages where url = ?`, url)
+	err := row.Scan(&terms_js, &hist_js, &page.Text)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal([]byte(terms_js), &page.Terms)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal([]byte(hist_js), &page.Hist)
+	if err != nil {
+		return nil, err
+	}
+
+	return page, nil
 }
