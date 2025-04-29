@@ -8,6 +8,27 @@ import (
 
 type Histogram = map[string]int
 
+func GetPageText(root *html.Node) string {
+	var b strings.Builder
+	ExtractText(root, &b)
+	return b.String()
+}
+
+func ExtractText(n *html.Node, b *strings.Builder) {
+	if n.Type == html.ElementNode && ignoreTags[n.Data] {
+		return
+	}
+
+	data := strings.TrimSpace(n.Data)
+	if n.Type == html.TextNode && data != "" {
+		b.WriteString(data + " ")
+	}
+
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		ExtractText(c, b)
+	}
+}
+
 func AddToHistogram(s string, into *Histogram) {
 	nonASCII := regexp.MustCompile(`[^-A-Za-z]+`)
 	words := nonASCII.Split(s, -1)

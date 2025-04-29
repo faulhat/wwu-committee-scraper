@@ -8,6 +8,26 @@ import (
 	"testing"
 )
 
+func TestExtractText(t *testing.T) {
+	expected := "and that we who dwell in the region extending from the river Phasis to the Pillars of Heracles inhabit a small portion only about the sea. Source "
+
+	file, err := os.Open("testdata/sample.html")
+	if err != nil {
+		t.Fatalf("Couldn't open file: %v", err)
+	}
+	defer file.Close()
+
+	doc, err := html.Parse(file)
+	if err != nil {
+		t.Fatalf("Couldn't parse HTML: %v", err)
+	}
+
+	text := GetPageText(doc)
+	if text != expected {
+		t.Errorf("Didn't get expected text.\nWanted:\t%v\nGot:\t%v", expected, text)
+	}
+}
+
 func TestHistogram(t *testing.T) {
 	s := "!?a a, b b aa ..b a!?"
 	expected := Histogram{
