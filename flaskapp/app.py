@@ -13,7 +13,7 @@ def folder_exists(path):
 # Display static HTML.
 @app.route('/')
 def index():
-    return send_file("../frontend/index.html")
+    return send_file("../demo_frontend/index.html")
 
 # Search for JSON data.
 @app.route('/data/<path:subpath>')
