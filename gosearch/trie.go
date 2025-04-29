@@ -1,6 +1,9 @@
 package main
 
-import "strings"
+import (
+	"strings"
+	"fmt"
+)
 
 type TrieNode struct {
 	term     bool
@@ -45,6 +48,24 @@ func (n *TrieNode) intoString(b *strings.Builder, depth int) {
 
 			b.WriteByte(byte(i))
 			c.intoString(b, depth+1)
+		}
+	}
+}
+
+func (n *TrieNode) ToHistogram() *Histogram {
+	plot := Histogram{}
+	n.intoHistogram(&plot, "")
+	return &plot
+}
+
+func (n *TrieNode) intoHistogram(plot *Histogram, acc string) {
+	if n.term {
+		(*plot)[acc] = n.val
+	}
+
+	for i, c := range n.children {
+		if c != nil {
+			c.intoHistogram(plot, fmt.Sprintf("%s%c", acc, i))
 		}
 	}
 }

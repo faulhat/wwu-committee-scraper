@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestTrieToString(t *testing.T) {
 	trie := new(TrieNode)
@@ -68,6 +71,11 @@ func TestTrieAddSet(t *testing.T) {
 		} else if v != n {
 			t.Errorf("Trie didn't contain expected value for word %v. Got %v", word, v)
 		}
+	}
+
+	plot := trie.ToHistogram()
+	if !reflect.DeepEqual(*plot, words) {
+		t.Errorf("Trie didn't map to expected histogram. Got: %v", plot)
 	}
 
 	trie.Set("hey", 2)
