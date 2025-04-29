@@ -47,10 +47,10 @@ func TestTrieMember(t *testing.T) {
 	}
 }
 
-func TestTrieAdd(t *testing.T) {
+func TestTrieAddSet(t *testing.T) {
 	var words = map[string]int{
-		"hey": 4,
-		"hi": 3,
+		"hey":   4,
+		"hi":    3,
 		"hello": 2,
 	}
 
@@ -68,5 +68,13 @@ func TestTrieAdd(t *testing.T) {
 		} else if v != n {
 			t.Errorf("Trie didn't contain expected value for word %v. Got %v", word, v)
 		}
+	}
+
+	trie.Set("hey", 2)
+	v, ok := trie.Get("hey")
+	if !ok {
+		t.Errorf("Trie didn't contain expected word after update.")
+	} else if v != 2 {
+		t.Errorf("Trie didn't contain expected value after update. Got %v", v)
 	}
 }

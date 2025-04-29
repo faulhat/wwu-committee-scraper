@@ -3,9 +3,9 @@ package main
 import "strings"
 
 type TrieNode struct {
-	term bool
+	term     bool
 	children [256]*TrieNode
-	val int
+	val      int
 }
 
 func TrieFromList(terms []string) *TrieNode {
@@ -34,7 +34,7 @@ func (n *TrieNode) intoString(b *strings.Builder, depth int) {
 		if c != nil {
 			if depth > 0 {
 				if indent {
-					b.WriteString(strings.Repeat(" ", 2 + 4 * (depth - 1)))
+					b.WriteString(strings.Repeat(" ", 2+4*(depth-1)))
 				} else {
 					b.WriteString(" ")
 				}
@@ -44,25 +44,31 @@ func (n *TrieNode) intoString(b *strings.Builder, depth int) {
 			}
 
 			b.WriteByte(byte(i))
-			c.intoString(b, depth + 1)
+			c.intoString(b, depth+1)
 		}
 	}
 }
 
 func (n *TrieNode) Add(s string) {
-	n.put(s, 0)
+	t := n.ensureNode(s, 0)
+	t.val++
 }
 
-func (n *TrieNode) put(s string, c int) {
+func (n *TrieNode) Set(s string, val int) {
+	t := n.ensureNode(s, 0)
+	t.val = val
+}
+
+func (n *TrieNode) ensureNode(s string, c int) *TrieNode {
 	if c == len(s) {
 		n.term = true
-		n.val++
+		return n
 	} else {
 		if n.children[s[c]] == nil {
 			n.children[s[c]] = new(TrieNode)
 		}
 
-		n.children[s[c]].put(s, c + 1)
+		return n.children[s[c]].ensureNode(s, c+1)
 	}
 }
 
@@ -79,5 +85,5 @@ func (n *TrieNode) find(s string, c int) (int, bool) {
 		return 0, false
 	}
 
-	return n.children[s[c]].find(s, c + 1)
+	return n.children[s[c]].find(s, c+1)
 }
