@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-var words = map[string]int{
+var words = Histogram{
 	"hills":        1,
 	"hill":         3,
 	"hillsborough": 1,

@@ -48,7 +48,7 @@ func TestTrieMember(t *testing.T) {
 }
 
 func TestTrieAddSet(t *testing.T) {
-	var words = map[string]int{
+	var words = Histogram{
 		"hey":   4,
 		"hi":    3,
 		"hello": 2,
