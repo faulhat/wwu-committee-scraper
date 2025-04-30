@@ -2,10 +2,106 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fetch JSON Data</title>
+    <title>WWU Committee Finder</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 2rem;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #005daa;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #005daa;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .confidence {
+            font-weight: bold;
+            color: #228B22;
+        }
+
+        a {
+            color: #005daa;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
+    <h1>WWU Committees</h1>
+    <table id="committeeTable">
+        <thead>
+            <tr>
+                <th>Committee</th>
+                <th>Summary</th>
+                <th>Confidence</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/data/demo_example.json')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('tableBody');
+                    data.forEach(committee => {
+                        const row = document.createElement('tr');
+                        
+                        // URL columnm
+                        const urlCell = document.createElement('td');
+                        const link = document.createElement('a');
+                        link.href = committee.url;
+                        link.textContent = new URL(committee.url).hostname.split('.')[0].toUpperCase();
+                        urlCell.appendChild(link);
+                        
+                        // Summary column
+                        const summaryCell = document.createElement('td');
+                        summaryCell.textContent = committee.summary;
+                        
+                        // Confidence column
+                        const confidenceCell = document.createElement('td');
+                        confidenceCell.className = 'confidence';
+                        confidenceCell.textContent = `${(committee.confidence * 100).toFixed(1)}%`;
+                        
+                        row.appendChild(urlCell);
+                        row.appendChild(summaryCell);
+                        row.appendChild(confidenceCell);
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('ERMMM Somthing went wrong, loading committee data:', error));
+        });
+    </script>
 </body>
 </html>

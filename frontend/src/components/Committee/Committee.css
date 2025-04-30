@@ -3,7 +3,6 @@
   flex-direction: column;
   justify-content: space-between;
   width: 100%; /* Full width */
-  cursor: pointer;
   margin: 0 0 1rem 0; /* Adjusted margin */
   padding: 1rem; /* Optional padding inside */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow to give the lifted effect */
@@ -44,4 +43,15 @@
   line-height: 1rem; /* Adjusted line height */
   margin-bottom: 5px;
   text-align: left;
+}
+
+.committee-link {
+  color: #0066cc;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 2px;
+}
+
+.committee-link:hover {
+  text-decoration: none;
 }

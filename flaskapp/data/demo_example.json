@@ -1,0 +1,37 @@
+[
+    {
+      "url": "https://Uncatigorised.wwu.edu/campus-public-safety-advisory-council",
+      "summary": "Advisory body that supports the chief of police by providing input on public safety policies, campus security and community relations",
+      "confidence": 0.92
+    },
+    {
+      "url": "https://AcademicCommittee.wwu.edu/committees/as-elections-advisory-committee/",
+      "summary": "The Academic Coordinating Commission (ACC) is charged with oversight of all aspects of the curriculum, curricular policy and Westerns academic enterprise.",
+      "confidence": 0.89
+    },
+    {
+      "url": "https://AcademicCommittee.wwu.edu/benefits-committee",
+      "summary": "The President's Council provides a forum in which the leadership of the internal Ethnic Student Center (ESC) organizations can come together to foster communication and teamwork.",
+      "confidence": 0.78
+    },
+    {
+      "url": "https://FacultyCommittee.wwu.edu/ethics-board",
+      "summary": "Hears and decides on cases involving alleged violations of Western's Parking Regulations. The Appeals Board reviews Parking citation appeals at the 2nd level, after the in-house appeal is made.",
+      "confidence": 0.91
+    },
+    {
+      "url": "https://AcademicCommittee.wwu.edu/committees/student-conduct-code-review-committee/",
+      "summary": "Evaluates and may recommend changes to the University's conduct code. This review committee includes staff and faculty and meets approximately every five years.",
+      "confidence": 0.84
+    },
+    {
+      "url": "https://StudentCommittee.wwu.edu/committees/residential-advisory-committee/",
+      "summary": "Advises the director of University Residences on matters concerning the campus residential community as they relate to student development.",
+      "confidence": 0.73
+    },
+    {
+        "url": "https://as.wwu.edu/committees/as-student-advisory-committee/",
+        "summary": "To review and make recommendations to the AS Board of Directors regarding the AS Election Code and to advise the AS Elections Coordinator on all Elections processes in an effort to encourage student participation in the election process.  ",
+        "confidence": 0.99
+    }
+  ]

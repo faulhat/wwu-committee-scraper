@@ -11,19 +11,24 @@ import img4 from '../../assets/a.png';
 import img5 from '../../assets/aaa.png';
 import img6 from '../../assets/aaaa.png';
 
+const committeeLinks = {
+  'The Academic Coordinating Commission (ACC)': '#',
+  'The Presidents Council': '#',
+  'Student Parking Committee': '#'
+};
+
 const committees = [
   {
     title: 'Academic Committees',
     bulletPoints: [
-      'Bla bla bla foobar',
-      'Bla bla bla foobar',
-      'Bla bla bla foobar',
+      'The Academic Coordinating Commission (ACC)',
+      'The Presidents Council',
     ],
   },
   {
     title: 'Faculty Committees',
     bulletPoints: [
-      'Bla bla bla foobar',
+      'Student Parking Committee',
       'Bla bla bla foobar',
       'Bla bla bla foobar',
     ],
@@ -48,7 +53,6 @@ const committees = [
 ];
 
 function App() {
-  // All sections as expanded (open) by default
   const [expandedSections, setExpandedSections] = useState({
     academic_committees: true,
     faculty_committees: true,
@@ -107,7 +111,11 @@ function App() {
               </h2>
             </div>
             {expandedSections[sectionKey] && (
-              <CommitteeList committees={[committee]} showTitle={false} />
+              <CommitteeList 
+                committees={[committee]} howTitle={false}
+                // Pass the links to CommitteeList
+                committeeLinks={committeeLinks}
+              />
             )}
           </div>
         );

@@ -5,3 +5,19 @@
   width: 100%; /* Full width */
   padding: 0; /* Remove padding to stretch to edges */
 }
+
+.committee-link {
+  color: #0066cc;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+.committee-link:hover {
+  text-decoration: none;
+}
+
+.committee-item {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
