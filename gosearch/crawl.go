@@ -5,10 +5,17 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/net/html"
 	"log"
-	"net/http"
+	"strings"
 )
 
 func crawl(target *sql.DB, root string, keywords []string, bounded bool, maxDepth int, black_subdomains []string, black_urls []string) {
+	browser, err := NewBrowser()
+	if err != nil {
+		log.Fatalf("[ERROR] Couldn't open virtual browser: %v", err)
+	}
+	defer browser.AllocCtx.Cancel()
+	defer browser.BrowserCtx.Cancel()
+
 	seen := make(map[string]bool)
 	counter := 1
 
@@ -18,14 +25,14 @@ func crawl(target *sql.DB, root string, keywords []string, bounded bool, maxDept
 		url, depth := queue.Dequeue()
 		log.Printf("%v\t%v\t%v\n", counter, depth, url)
 
-		res, err := http.Get(root)
+		rendered, _, code, err := GetRendered(browser, url)
 		if err != nil {
 			log.Printf("[ERROR] Couldn't retrieve page: %v\n", err)
 		} else {
-			if res.StatusCode != http.StatusOK {
-				log.Printf("[ERROR] Couldn't retrieve page (got code %v)\n", res.StatusCode)
+			if !ResponseOk(code) {
+				log.Printf("[ERROR] Couldn't retrieve page (got code %v)\n", code)
 			} else {
-				doc, err := html.Parse(res.Body)
+				doc, err := html.Parse(strings.NewReader(rendered))
 				if err != nil {
 					log.Printf("[ERROR] Couldn't parse HTML: %v\n", err)
 				} else {
@@ -57,8 +64,6 @@ func crawl(target *sql.DB, root string, keywords []string, bounded bool, maxDept
 					}
 				}
 			}
-
-			res.Body.Close()
 		}
 	}
 }

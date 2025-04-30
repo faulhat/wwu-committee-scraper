@@ -28,7 +28,7 @@ func main() {
 	black_subdomains := []string{"cedar", "catalog"}
 	black_urls := []string{}
 
-	crawl(db, "https://wwu.edu/", keywords, true, 0, black_subdomains, black_urls)
+	crawl(db, "https://wwu.edu/", keywords, true, 1, black_subdomains, black_urls)
 
 	DBDump(db, os.Stderr)
 }
