@@ -1,9 +1,9 @@
 #!/bin/bash
 
 OUT_FILE=output.txt
-DEPTH=2
+DEPTH=1
 KEYWORDS=("no" "more" "computer" "science")
 
-./wwucrawler.py -o"$OUT_FILE" -d"$DEPTH" "${KEYWORDS[@]}" &&
+python3 crawler -o"$OUT_FILE" -d"$DEPTH" "${KEYWORDS[@]}" &&
 	echo "Search of wwu.edu for keywords [${KEYWORDS[@]}] (depth $DEPTH) complete!" &&
 	echo "Check $OUT_FILE for search results."
