@@ -29,6 +29,7 @@
             padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid #ddd;
+            width: 33%;
         }
 
         th {
@@ -60,9 +61,9 @@
     <table id="committeeTable">
         <thead>
             <tr>
-                <th>Committee</th>
+                <th>Page</th>
                 <th>Summary</th>
-                <th>Confidence</th>
+                <th>Score</th>
             </tr>
         </thead>
         <tbody id="tableBody">
@@ -71,7 +72,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            fetch('/data/demo_example.json')
+            fetch('/pages.json')
                 .then(response => response.json())
                 .then(data => {
                     const tbody = document.getElementById('tableBody');
@@ -82,21 +83,21 @@
                         const urlCell = document.createElement('td');
                         const link = document.createElement('a');
                         link.href = committee.url;
-                        link.textContent = new URL(committee.url).hostname.split('.')[0].toUpperCase();
+                        link.textContent = committee.title;
                         urlCell.appendChild(link);
                         
                         // Summary column
                         const summaryCell = document.createElement('td');
-                        summaryCell.textContent = committee.summary;
+                        summaryCell.innerHTML = committee.summary;
                         
-                        // Confidence column
-                        const confidenceCell = document.createElement('td');
-                        confidenceCell.className = 'confidence';
-                        confidenceCell.textContent = `${(committee.confidence * 100).toFixed(1)}%`;
+                        // score column
+                        const scoreCell = document.createElement('td');
+                        scoreCell.className = 'score';
+                        scoreCell.textContent = `${committee.score}`;
                         
                         row.appendChild(urlCell);
                         row.appendChild(summaryCell);
-                        row.appendChild(confidenceCell);
+                        row.appendChild(scoreCell);
                         tbody.appendChild(row);
                     });
                 })

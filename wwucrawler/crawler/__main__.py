@@ -25,14 +25,14 @@ if args.ofile is not None:
 print(f"Searching WWU domain for keywords: {args.keywords}")
 print(f"Max depth: {'INF' if args.unbounded else args.depth}")
 
-db_con, db_cur = db_setup("../pages.db")
+db_con = db_setup("../pages.db")
 try:
-    crawler = Crawler(db_cur, set(args.keywords), black_subdomains=["cedar", "catalog"])
+    crawler = Crawler(db_con, set(args.keywords), black_subdomains=["cedar", "catalog"])
     urls = crawler.crawl(
         "https://wwu.edu/", bounded=(not args.unbounded), depth=args.depth
     )
 
-    db_dump_results(db_cur, f=ofile)
+    db_dump_results(db_con, f=ofile)
 except:
     print_exc()
 finally:

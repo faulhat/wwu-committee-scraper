@@ -9,19 +9,19 @@ import sys
 from queue import Queue
 from urls import *
 from database import *
-from sqlite3 import Cursor
+from sqlite3 import Connection
 from search import search
 
 
 class Crawler:
     def __init__(
         self,
-        db_cur: Cursor,
+        db_con: Connection,
         keywords: list[str],
         black_subdomains: list[str] = [],
         black_urls: list[str] = [],
     ):
-        self.db_cur = db_cur
+        self.db_con = db_con
         self.seen = set()
         self.keywords = keywords
         self.black_subdomains = set(black_subdomains)
@@ -41,12 +41,16 @@ class Crawler:
                 res = requests.get(url, timeout=(3, 10))
             except TimeoutError:
                 print("Timed out")
+            except requests.exceptions.RequestException as e:
+                print(f"Couldn't retrieve page: {e.__str__()}")
 
             if res.status_code == 200:
                 soup = BeautifulSoup(res.text, "html.parser")
+                title = soup.title.string if soup.title else None
+
                 text = re.sub(r"\s+", " ", soup.text.strip())
                 terms = search(text, self.keywords)
-                db_add_page(self.db_cur, url, terms, terms.total, text)
+                db_add_page(self.db_con, url, title, terms, terms.total, text)
 
                 if not bounded or layer < depth:
                     new_links = [

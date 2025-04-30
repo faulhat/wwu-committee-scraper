@@ -1,16 +1,16 @@
 from sqlite3 import Connection, Cursor, connect
-import sys, typing, re, json
+import sys, typing, json
 from search import SearchRes
 
 
-def db_setup(target: str) -> tuple[Connection, Cursor]:
+def db_setup(target: str) -> Connection:
     con = connect(target)
-    cur = con.cursor()
-    cur.execute(
+    con.cursor().execute(
         """
         CREATE TABLE IF NOT EXISTS pages (
             id          INTEGER PRIMARY KEY AUTOINCREMENT,
             url         TEXT NOT NULL,
+            title       TEXT,
             terms       TEXT NOT NULL,
             score       REAL,
             full_text   TEXT NOT NULL,
@@ -19,11 +19,14 @@ def db_setup(target: str) -> tuple[Connection, Cursor]:
         )
     """
     )
+    con.commit()
 
-    return con, cur
+    return con
 
 
-def db_add_page(cur: Cursor, url: str, terms: SearchRes, score: float, text: str):
+def db_add_page(
+    con: Connection, url: str, title: str, terms: SearchRes, score: float, text: str
+):
     summary = ""
     if terms.total == 0:
         if len(text) > 103:
@@ -42,18 +45,20 @@ def db_add_page(cur: Cursor, url: str, terms: SearchRes, score: float, text: str
         else:
             summary += text[terms.end :]
 
-    cur.execute(
-        "INSERT INTO pages (url, terms, score, full_text, summary) VALUES (?, ?, ?, ?, ?)",
-        (url, json.dumps(terms.appearances), score, text, summary),
+    con.cursor().execute(
+        "INSERT INTO pages (url, title, terms, score, full_text, summary) VALUES (?, ?, ?, ?, ?, ?)",
+        (url, title, json.dumps(terms.appearances), score, text, summary),
     )
+    con.commit()
 
 
-def db_dump_results(cur: Cursor, f: typing.TextIO = sys.stderr):
+def db_dump_results(con: Connection, f: typing.TextIO = sys.stderr):
+    cur = con.cursor()
     cur.execute(
-        "SELECT id, url, terms, score, summary, retrieved FROM pages WHERE score > 0 ORDER BY score DESC"
+        "SELECT url, title, terms, score, summary, retrieved FROM pages WHERE score > 0"
     )
     rows = cur.fetchall()
-    for page_id, url, terms, score, summary, retrieved in rows:
-        print(f"{page_id}. {url} @ {retrieved}", file=f)
+    for url, title, terms, score, summary, retrieved in rows:
+        print(f'{url} @ {retrieved} "{title}"', file=f)
         print(f"\t{terms}\n\t{score}", file=f)
         print(f"\t{summary}\n", file=f)

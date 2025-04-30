@@ -1,5 +1,5 @@
-
 import re
+
 
 # Result of searching a document
 # Contains a map of terms to number of appearances, the start position
@@ -31,5 +31,5 @@ def search(text: str, terms: list[str]) -> SearchRes:
 
             cur = match.end()
             total += 1
-        
+
     return SearchRes(appearances, first, end, total)

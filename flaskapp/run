@@ -1,6 +1,0 @@
-#!/bin/bash
-
-echo "Running server... Navigate to http://localhost:5000/data/books.json, change the corresponding file in the 'data' directory, and reload. The changes should be reflected. You should be able to add your own files as well."
-echo
-.env/bin/python app.py
-
