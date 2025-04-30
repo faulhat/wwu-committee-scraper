@@ -31,7 +31,7 @@ func StripQuery(url string) string {
 	return strings.SplitN(url, "?", 2)[0]
 }
 
-func CompleteLink(link string, domain string) string {
+func CompleteLink(link string, parent string) string {
 	if !(startswith(link, "/") || startswith(link, "http://") || startswith(link, "https://")) {
 		return ""
 	}
@@ -41,7 +41,13 @@ func CompleteLink(link string, domain string) string {
 	}
 
 	if startswith(link, "/") {
-		link = "https://" + domain + link
+		link = "https://" + GetDomain(parent) + link
+	} else {
+		d, _ := GetDomainSubdomain(link)
+		p_d, _ := GetDomainSubdomain(parent)
+		if d != p_d {
+			return ""
+		}
 	}
 
 	return link

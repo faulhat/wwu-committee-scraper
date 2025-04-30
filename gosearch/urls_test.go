@@ -44,26 +44,32 @@ func TestGetDomainSubdomain(t *testing.T) {
 
 func TestCompleteLink(t *testing.T) {
 	link := "https://en.wikipedia.org/wiki/Greece"
-	comp := CompleteLink(link, "wikipedia.org")
+	comp := CompleteLink(link, "https://wikipedia.org")
 	if comp != "https://en.wikipedia.org/wiki/Greece/" {
 		t.Errorf("(1)Didn't get expected completed link. Got %v", comp)
 	}
 
 	link = "https://google.com/"
-	comp = CompleteLink(link, "google.com")
+	comp = CompleteLink(link, "https://google.com")
 	if comp != "https://google.com/" {
 		t.Errorf("(2)Didn't get expected completed link. Got %v", comp)
 	}
 
 	link = "/hello"
-	comp = CompleteLink(link, "google.com")
+	comp = CompleteLink(link, "https://google.com")
 	if comp != "https://google.com/hello/" {
 		t.Errorf("(3)Didn't get expected completed link. Got %v", comp)
 	}
 
 	link = "nowhere"
-	comp = CompleteLink(link, "google.com")
+	comp = CompleteLink(link, "https://google.com")
 	if comp != "" {
-		t.Errorf("Didn't get expected error value. Got %v", comp)
+		t.Errorf("(1)Didn't get expected error value. Got %v", comp)
+	}
+
+	link = "https://nowhere.com"
+	comp = CompleteLink(link, "https://google.com")
+	if comp != "" {
+		t.Errorf("(2)Didn't get expected error value. Got %v", comp)
 	}
 }
