@@ -104,16 +104,27 @@ func DBDump(db *sql.DB, dst io.Writer) {
 
 		err := rows.Scan(&url, &terms, &hist, &text)
 		if err != nil {
-			log.Fatalf("Couldn't can row: %v", err)
+			log.Fatalf("Couldn't scan row: %v", err)
 		}
 
 		io.WriteString(dst, fmt.Sprintf("%v\n", url))
-		io.WriteString(dst, fmt.Sprintf("\t%v\n", terms))
-		io.WriteString(dst, fmt.Sprintf("\t%v\n", hist))
-		if len(text) > 23 {
-			io.WriteString(dst, fmt.Sprintf("\t%v...\n\n", text[:20]))
+
+		if len(terms) > 103 {
+			io.WriteString(dst, fmt.Sprintf("\t%v...\n\n", terms[:100]))
 		} else {
-			io.WriteString(dst, fmt.Sprintf("\t%v\n\n", text))
+			io.WriteString(dst, fmt.Sprintf("\t%v\n\n", terms))
 		}
+
+		if len(hist) > 103 {
+			io.WriteString(dst, fmt.Sprintf("\t%v...\n\n", hist[:100]))
+		} else {
+			io.WriteString(dst, fmt.Sprintf("\t%v\n\n", hist))
+		}
+
+		//if len(text) > 103 {
+		//	io.WriteString(dst, fmt.Sprintf("\t%v...\n\n", text[:100]))
+		//} else {
+			io.WriteString(dst, fmt.Sprintf("\t%v\n\n", text))
+		//}
 	}
 }
