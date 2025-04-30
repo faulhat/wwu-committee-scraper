@@ -3,26 +3,28 @@ package main
 import "testing"
 
 func TestQueue(t *testing.T) {
-	data := []string{"a", "b", "c", "d"}
+	names := []string{"a", "b", "c", "d"}
+	nums := []int{1, 5, 3, 4}
 
 	queue := NewQueue()
-	for _, k := range data {
-		queue.Enqueue(k)
+	for i, k := range names {
+		queue.Enqueue(k, nums[i])
 	}
 
 	sz := queue.Size()
-	if sz != len(data) {
+	if sz != len(names) {
 		t.Errorf("Got wrong size: %v", sz)
 	}
 
-	for _, k := range data {
-		s, err := queue.Dequeue()
-		if err != nil {
-			t.Fatalf("Failed to dequeue: %v", err)
-		}
+	for i, k := range names {
+		s, n := queue.Dequeue()
 
 		if s != k {
-			t.Errorf("Didn't get expected result from queue. Wanted: %v. Got: %v.", k, s)
+			t.Errorf("Didn't get expected result from queue at pos %v. Wanted: %v. Got: %v.", i, k, s)
+		}
+
+		if n != nums[i] {
+			t.Errorf("Didn't get expected result from queue at pos %v. Wanted: %v. Got: %v.", i, nums[i], n)
 		}
 	}
 

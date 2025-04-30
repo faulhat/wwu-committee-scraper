@@ -30,3 +30,27 @@ func GetDomainSubdomain(url string) (string, string) {
 func StripQuery(url string) string {
 	return strings.SplitN(url, "?", 2)[0]
 }
+
+func CompleteLink(link string, domain string) string {
+	if !(startswith(link, "/") || startswith(link, "http://") || startswith(link, "https://")) {
+		return ""
+	}
+
+	if !endswith(link, "/") {
+		link += "/"
+	}
+
+	if startswith(link, "/") {
+		link = "https://" + domain + link
+	}
+
+	return link
+}
+
+func startswith(s string, p string) bool {
+	return len(s) >= len(p) && s[:len(p)] == p
+}
+
+func endswith(s string, p string) bool {
+	return len(s) >= len(p) && s[len(s)-len(p):] == p
+}

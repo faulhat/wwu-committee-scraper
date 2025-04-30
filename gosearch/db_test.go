@@ -73,22 +73,27 @@ func TestDBAddPage1(t *testing.T) {
 	db := setupTestDB(t)
 	defer db.Close()
 
-	err = DBAddPage(db, path, doc, hilly_terms)
+	page := NewPage(path, doc, hilly_terms)
+	err = DBAddPage(db, page)
 	if err != nil {
 		t.Fatalf("Couldn't add page to DB: %v", err)
 	}
 
-	page, err := DBGetPage(db, path)
+	rpage, err := DBGetPage(db, path)
 	if err != nil {
 		t.Fatalf("Couldn't retrieve page from DB: %v", err)
 	}
 
-	if page.Text != hilly_expected_text {
-		t.Errorf("Didn't get expected text from DB. Got: %v", page.Text)
+	if !reflect.DeepEqual(rpage, page) {
+		t.Errorf("Retrieved page didn't match input. Got: %v", rpage)
 	}
 
-	if !reflect.DeepEqual(page.Terms, hilly_expected_terms) {
-		t.Errorf("Didn't get expected terms table from DB. Got: %v", page.Terms)
+	if rpage.Text != hilly_expected_text {
+		t.Errorf("Didn't get expected text from DB. Got: %v", rpage.Text)
+	}
+
+	if !reflect.DeepEqual(rpage.Terms, hilly_expected_terms) {
+		t.Errorf("Didn't get expected terms table from DB. Got: %v", rpage.Terms)
 	}
 }
 
@@ -118,21 +123,26 @@ func TestDBAddPage2(t *testing.T) {
 	db := setupTestDB(t)
 	defer db.Close()
 
-	err = DBAddPage(db, path, doc, nil)
+	page := NewPage(path, doc, nil)
+	err = DBAddPage(db, page)
 	if err != nil {
 		t.Fatalf("Couldn't add page to DB: %v", err)
 	}
 
-	page, err := DBGetPage(db, path)
+	rpage, err := DBGetPage(db, path)
 	if err != nil {
 		t.Fatalf("Couldn't retrieve page from DB: %v", err)
 	}
 
-	if page.Text != e_text {
-		t.Errorf("Didn't get expected text from DB. Got: %v", page.Text)
+	if !reflect.DeepEqual(rpage, page) {
+		t.Errorf("Retrieved page didn't match input. Got: %v", rpage)
 	}
 
-	if !reflect.DeepEqual(page.Hist, e_hist) {
-		t.Errorf("Didn't get expected terms table from DB. Got: %v", page.Terms)
+	if rpage.Text != e_text {
+		t.Errorf("Didn't get expected text from DB. Got: %v", rpage.Text)
+	}
+
+	if !reflect.DeepEqual(rpage.Hist, e_hist) {
+		t.Errorf("Didn't get expected terms table from DB. Got: %v", rpage.Terms)
 	}
 }

@@ -1,7 +1,5 @@
 package main
 
-import "errors"
-
 /* TODO: Make this not a linked list */
 
 type Queue struct {
@@ -11,16 +9,17 @@ type Queue struct {
 }
 
 type QueueNode struct {
-	data string
-	next *QueueNode
+	url   string
+	depth int
+	next  *QueueNode
 }
 
 func NewQueue() *Queue {
 	return &Queue{nil, nil, 0}
 }
 
-func (q *Queue) Enqueue(s string) {
-	node := &QueueNode{s, nil}
+func (q *Queue) Enqueue(url string, depth int) {
+	node := &QueueNode{url, depth, nil}
 	prev := q.tail
 	q.tail = node
 	if prev == nil {
@@ -32,21 +31,18 @@ func (q *Queue) Enqueue(s string) {
 	q.size++
 }
 
-func (q *Queue) Dequeue() (string, error) {
+func (q *Queue) Dequeue() (string, int) {
+	url := q.head.url
+	depth := q.head.depth
+	q.head = q.head.next
 	if q.head == nil {
-		return "", errors.New("Queue empty!")
-	} else {
-		s := q.head.data
-		q.head = q.head.next
-		if q.head == nil {
-			q.tail = nil
-		}
-
-		q.size--
-		return s, nil
+		q.tail = nil
 	}
+
+	q.size--
+	return url, depth
 }
 
 func (q *Queue) Size() int {
 	return q.size
-} 
+}

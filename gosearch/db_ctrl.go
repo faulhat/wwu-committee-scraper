@@ -31,8 +31,7 @@ func DBSetup(db *sql.DB) error {
 	return err
 }
 
-func DBAddPage(db *sql.DB, url string, root *html.Node, terms []string) error {
-	page := NewPage(url, root, terms)
+func DBAddPage(db *sql.DB, page *Page) error {
 	terms_js, err := json.Marshal(page.Terms)
 	if err != nil {
 		return err

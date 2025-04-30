@@ -26,18 +26,44 @@ func TestGetDomainSubdomain(t *testing.T) {
 	url := "https://en.wikipedia.org/wiki/Greece"
 	d, s := GetDomainSubdomain(url)
 	if d != "wikipedia.org" || s != "en" {
-		t.Errorf("Didn't get expected domain and subdomain. Got: %v, %v", d, s)
+		t.Errorf("(1)Didn't get expected domain and subdomain. Got: %v, %v", d, s)
 	}
 
 	url = "https://google.com"
 	d, s = GetDomainSubdomain(url)
 	if d != "google.com" || s != "" {
-		t.Errorf("Didn't get expected domain and subdomain. Got: %v, %v", d, s)
+		t.Errorf("(2)Didn't get expected domain and subdomain. Got: %v, %v", d, s)
 	}
 
 	bad := "asdjfjadf/"
 	d, s = GetDomainSubdomain(bad)
 	if d != "" || s != "" {
 		t.Errorf("Didn't get expected error values. Got: %v, %v", d, s)
+	}
+}
+
+func TestCompleteLink(t *testing.T) {
+	link := "https://en.wikipedia.org/wiki/Greece"
+	comp := CompleteLink(link, "wikipedia.org")
+	if comp != "https://en.wikipedia.org/wiki/Greece/" {
+		t.Errorf("(1)Didn't get expected completed link. Got %v", comp)
+	}
+
+	link = "https://google.com/"
+	comp = CompleteLink(link, "google.com")
+	if comp != "https://google.com/" {
+		t.Errorf("(2)Didn't get expected completed link. Got %v", comp)
+	}
+
+	link = "/hello"
+	comp = CompleteLink(link, "google.com")
+	if comp != "https://google.com/hello/" {
+		t.Errorf("(3)Didn't get expected completed link. Got %v", comp)
+	}
+
+	link = "nowhere"
+	comp = CompleteLink(link, "google.com")
+	if comp != "" {
+		t.Errorf("Didn't get expected error value. Got %v", comp)
 	}
 }

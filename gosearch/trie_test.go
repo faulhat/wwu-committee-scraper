@@ -73,6 +73,7 @@ func TestTrieAddSet(t *testing.T) {
 		}
 	}
 
+	trie.Set("whatever", 0)
 	plot := trie.ToHistogram()
 	if !reflect.DeepEqual(*plot, words) {
 		t.Errorf("Trie didn't map to expected histogram. Got: %v", plot)

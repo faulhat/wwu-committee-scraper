@@ -59,7 +59,7 @@ func (n *TrieNode) ToHistogram() *Histogram {
 }
 
 func (n *TrieNode) intoHistogram(plot *Histogram, acc string) {
-	if n.term {
+	if n.term && n.val > 0 {
 		(*plot)[acc] = n.val
 	}
 
