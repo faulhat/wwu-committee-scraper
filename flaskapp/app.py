@@ -1,7 +1,7 @@
-import json
 import os
 from flask import Flask, send_file, send_from_directory, redirect, url_for, jsonify
 from sqlite3 import connect, Cursor
+from typing import Any
 
 # Getting the app started
 app = Flask(__name__)
@@ -23,7 +23,7 @@ def data(subpath):
         return send_from_directory("data/", subpath)
     
 
-def full_pages_table(cur: Cursor) -> dict:
+def full_pages_table(cur: Cursor) -> list[dict[str, Any]]:
     cur.execute(
         "SELECT url, title, score, summary FROM pages WHERE score > 0 ORDER BY score DESC"
     )
@@ -43,12 +43,12 @@ def full_pages_table(cur: Cursor) -> dict:
 
 @app.route('/pages.json')
 def pages_list():
-    if not os.path.isfile("../pages.db"):
-        return redirect(url_for("not_found"))
+    table = []
+    if os.path.isfile("../pages.db"):
+        with connect("../pages.db") as db_con:
+            table = full_pages_table(db_con.cursor())
     
-    with connect("../pages.db") as db_con:
-        cur = db_con.cursor()
-        return jsonify(full_pages_table(cur))
+    return jsonify(table)
 
 
 if __name__ == "__main__":
