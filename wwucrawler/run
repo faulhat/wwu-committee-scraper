@@ -1,9 +1,10 @@
 #!/bin/bash
 
 OUT_FILE=output.txt
-DEPTH=4
+DEPTH=2
 KEYWORDS=("Committee" "committee" "associated students" "ASWWU" "AS" "board" "at-large" "student ambassador")
 
-python3 crawler -o"$OUT_FILE" -d"$DEPTH" "${KEYWORDS[@]}" &&
+rm -f ../pages.db
+python3 crawler -o"$OUT_FILE" -d"$DEPTH" $@ "${KEYWORDS[@]}" &&
 	echo "Search of wwu.edu for keywords [${KEYWORDS[@]}] (depth $DEPTH) complete!" &&
 	echo "Check $OUT_FILE for search results."

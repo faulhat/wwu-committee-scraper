@@ -5,7 +5,7 @@ import re
 # Contains a map of terms to number of appearances, the start position
 #   of the first term, end position, and the total number of keywords
 class SearchRes:
-    def __init__(self, appearances: dict[str, int], first: int, end: int, total: int):
+    def __init__(self, appearances, first, end, total):
         self.appearances = appearances
         self.first = first
         self.end = end
@@ -14,7 +14,7 @@ class SearchRes:
 
 # Search a document for given keywords
 # TODO:  Make this use a trie
-def search(text: str, terms: list[str]) -> SearchRes:
+def search(text, terms):
     appearances = {}
     first = -1
     end = -1

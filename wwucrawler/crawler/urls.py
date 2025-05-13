@@ -1,11 +1,11 @@
 import re
 
 
-def get_domain(url: str) -> str:
+def get_domain(url):
     return re.split(r"/", url, 3)[2]
 
 
-def get_domain_subdomain(url: str) -> tuple[str, str]:
+def get_domain_subdomain(url):
     full_domain = get_domain(url)
     segmented = full_domain.split(".")
     domain = ".".join(segmented[len(segmented) - 2 :])
@@ -13,5 +13,5 @@ def get_domain_subdomain(url: str) -> tuple[str, str]:
     return domain, subdomain
 
 
-def strip_query(url: str) -> str:
+def strip_query(url):
     return url.split("?")[0]

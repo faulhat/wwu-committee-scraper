@@ -3,12 +3,13 @@ from traceback import print_exc
 from argparse import ArgumentParser, REMAINDER
 
 from crawler import Crawler
-from database import db_setup, db_dump_results
+from pages_db import PagesDB
 
 
 parser = ArgumentParser(prog="crawler")
 parser.add_argument("-o", "--ofile", nargs="?", help="output file")
 parser.add_argument("-d", "--depth", default=4, type=int, help="max search depth")
+parser.add_argument("-w", "--workers", default=6, type=int, help="number of worker threads")
 parser.add_argument(
     "-u", "--unbounded", action="store_true", help="disable max search depth"
 )
@@ -25,18 +26,22 @@ if args.ofile is not None:
 print(f"Searching WWU domain for keywords: {args.keywords}")
 print(f"Max depth: {'INF' if args.unbounded else args.depth}")
 
-db_con = db_setup("../pages.db")
+DB_PATH = "../pages.db"
 try:
-    crawler = Crawler(db_con, set(args.keywords), black_subdomains=["cedar", "catalog"])
-    urls = crawler.crawl(
-        "https://wwu.edu/", bounded=(not args.unbounded), depth=args.depth
+    crawler = Crawler(
+        DB_PATH,
+        "https://wwu.edu/",
+        set(args.keywords),
+        max_depth=args.depth,
+        n_workers=args.workers,
+        black_subdomains=["cedar", "catalog"],
     )
+    crawler.start()
 
-    db_dump_results(db_con, f=ofile)
+    with PagesDB(DB_PATH) as db:
+        db.dump_results(f=ofile)
 except:
     print_exc()
 finally:
     if ofile != sys.stdout:
         ofile.close()
-
-    db_con.close()
