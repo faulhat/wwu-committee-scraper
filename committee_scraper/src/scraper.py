@@ -8,13 +8,11 @@ import utils
 summarize_prompt = """Summarize the following webpage content in exactly one sentence, between 10 and 25 words.
 Do not include any explanations, introductions, or markdown formatting."""
 
-extract_prompt = """Extract a list of STUDENT committee positions from the following university webpage text.
-Return ONLY the matching results in Python list format like: [position, position].
-Only include entries that:
-- Clearly refer to positions on committees that are for Students.
-- Follow the format of being listed as 'X at large student positions, x Students at large, etc.' or inside of an html table.
-If no clear student positions are found, return [].
-DO NOT include explanations or extra text.
+extract_prompt = """
+Extract a list of STUDENT committee positions from the following university webpage text.
+Return ONLY a valid list [].
+If there are no CLEAR declarations of a position
+or the website does not reference a committee, then return an empty list. Do not return any context
 """
 
 
@@ -23,15 +21,15 @@ class Scraper:
         self.model = None if model == "None" else model
         self.client = Client()
         self.db_connection = db_connection
-        self.score_threshold = score_threshold
+        self.score_threshold = score_threshold / 100
         self.URLS = []
         self.iteration = 1
 
     def fetch_urls(self):
         cursor = self.db_connection.cursor()
         cursor.execute(
-            "SELECT url FROM pages WHERE score > ? AND summary != ''  ORDER BY score desc",
-            (0,)
+            "SELECT url FROM pages WHERE score > ? ORDER BY score desc",
+            (self.score_threshold,)
         )
         rows = cursor.fetchall()
         self.URLS = [row[0] for row in rows]
@@ -70,6 +68,7 @@ class Scraper:
             self.page = self._set_page()
             if self.page is not None:
                 self.soup = BeautifulSoup(self.page, 'html.parser')
+                self.soup = self.extract_page_contents()
                 self.doc_links = self._set_doc_links()
                 self.emails = self._set_emails()
                 if self.scraper.model is not None:
@@ -79,9 +78,24 @@ class Scraper:
                     self.summary = "<N/A>"
                     self.positions = "<N/A>"
             else:
-                print(f"[DEBUG] Failed to load page: {self.url}")
+                print(f"Failed to load page: {self.url}")
                 self.summary = "<N/A>"
                 self.positions = "<N/A>"
+
+        # Extract only a portion of a full pages content.
+        def extract_page_contents(self):
+            # class=main-content
+            content_div = self.soup.find(class_='main-content')
+            # class=modular-content
+            if not content_div:
+                content_div = self.soup.find(class_='modular-content')
+            # <main> tag
+            if not content_div:
+                content_div = self.soup.find('main')
+            # HTML body
+            if not content_div:
+                content_div = self.soup.body or self.soup
+            return content_div
 
         def _set_page(self) -> str | None:
             try:
@@ -97,7 +111,8 @@ class Scraper:
         def _set_summary(self) -> str:
             try:
                 response = self.scraper.client.generate(model=self.scraper.model,
-                                                        prompt=self.soup.text + summarize_prompt)
+                                                        prompt=self.soup.get_text(strip=True, separator='\n')
+                                                        + summarize_prompt)
             except Exception as e:
                 return "<N/A>"
             return response.response
@@ -105,7 +120,8 @@ class Scraper:
         def _set_positions(self) -> [str]:
             try:
                 response = self.scraper.client.generate(model=self.scraper.model,
-                                                        prompt=self.soup.text + extract_prompt)
+                                                        prompt=self.soup.get_text(strip=True, separator='\n')
+                                                        + extract_prompt)
             except Exception as e:
                 return "<N/A>"
             return response.response
@@ -121,4 +137,3 @@ class Scraper:
             print(
                 f'Summary - URL: {self.url}\n    Summary: {self.summary}\n'
                 f'    Positions: {self.positions}\n    Emails: {self.emails}\n    Doc Links: {self.doc_links}')
-
