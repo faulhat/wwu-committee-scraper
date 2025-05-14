@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  text-align: left;
   width: 100%; /* Full width */
   margin: 0 0 1rem 0; /* Adjusted margin */
   padding: 1rem; /* Optional padding inside */
@@ -54,4 +55,16 @@
 
 .committee-link:hover {
   text-decoration: none;
+}
+
+.committee-actions {
+  display: inline-flex;      /* lay children out in one row */
+  align-items: Left;       /* vertically center if heights differ */
+  gap: 0.5rem;               /* space between the score and the link */
+}
+
+/* make sure nothing else forces a line-break */
+.confidence-score,
+.committee-link {
+  white-space: nowrap;
 }
