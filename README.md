@@ -32,7 +32,7 @@ The summarization process requires the use of the Ollama application to support
 running LLMs locally. The application is not required to run the program, but the summarization
 and data extraction features of the summarizer is only supported with the use of Ollama.
 
-- [Install Ollama](https://ollama.com/download])
+- [Install Ollama](https://ollama.com/download)
 
 After installation, open the Ollama Application and keep the process running as it will serve
 as the backend server for requests from the summarizer. 
