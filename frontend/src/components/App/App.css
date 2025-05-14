@@ -93,6 +93,8 @@ input:focus {
 .App {
   font-family: 'Work Sans', sans-serif;
   position: relative;
+  align-items: center;      /* center all children horizontally */
+
 }
 
 h1 {

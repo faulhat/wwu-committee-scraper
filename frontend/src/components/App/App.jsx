@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+// src/App.jsx
+import React, { useState, useEffect } from 'react';
 import CommitteeList from '../CommitteeList/CommitteeList';
 import Footer from '../Footer/Footer';
 import Subheader from '../Subheader/Subheader';
-import { Toaster } from "react-hot-toast";
+import { Toaster } from 'react-hot-toast';
 import './App.css';
 import gif from '../../assets/oldmain.gif';
 import img2 from '../../assets/img2.png';
@@ -11,115 +12,78 @@ import img4 from '../../assets/a.png';
 import img5 from '../../assets/aaa.png';
 import img6 from '../../assets/aaaa.png';
 
-const committeeLinks = {
-  'The Academic Coordinating Commission (ACC)': '#',
-  'The Presidents Council': '#',
-  'Student Parking Committee': '#'
-};
-
-const committees = [
-  {
-    title: 'Academic Committees',
-    bulletPoints: [
-      'The Academic Coordinating Commission (ACC)',
-      'The Presidents Council',
-    ],
-  },
-  {
-    title: 'Faculty Committees',
-    bulletPoints: [
-      'Student Parking Committee',
-      'Bla bla bla foobar',
-      'Bla bla bla foobar',
-    ],
-  },
-  {
-    title: 'Student Committees',
-    bulletPoints: [
-      'Bla bla bla foobar',
-      'Bla bla bla foobar',
-      'Bla bla bla foobar',
-    ],
-  },
-  {
-    title: 'Uncategorized Committees',
-    bulletPoints: [
-      'Bla bla bla foobar',
-      'Bla bla bla foobar',
-      'Bla bla bla foobar',
-    ],
-    isUncategorized: true,
-  },
-];
-
 function App() {
-  const [expandedSections, setExpandedSections] = useState({
-    academic_committees: true,
-    faculty_committees: true,
-    student_committees: true,
-    uncategorized_committees: true,
-  });
+  const [committees, setCommittees] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(6);
 
-  const toggleSection = (section) => {
-    setExpandedSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
+  useEffect(() => {
+    const fetchCommittees = async () => {
+      try {
+        const res = await fetch('/pages.json');
+        const data = await res.json();
+        setCommittees(data);
+      } catch (error) {
+        console.error('Error fetching committees:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCommittees();
+  }, []);
+
+  const handleLoadMore = () => {
+    setVisibleCount(prev => prev + 10);
   };
 
   return (
     <div className="App">
       <h1>
-        <a href="https://www.wwu.edu/" target="_blank" rel="noopener noreferrer">
-          <img src={img2} alt="Logo" className="header-logo" />
-        </a>
+        <img src={img2} alt="WWU Logo" className="header-logo" />
         <div className="header-right-images">
           <a href="https://admissions.wwu.edu/apply" target="_blank" rel="noopener noreferrer">
-            <img src={img5} alt="Icon 3" className="header-icon" />
+            <img src={img5} alt="Apply Icon" className="header-icon" />
           </a>
           <a href="https://alumniq.wwu.edu/giving/make-a-gift" target="_blank" rel="noopener noreferrer">
-            <img src={img6} alt="Icon 4" className="header-icon" />
+            <img src={img6} alt="Donate Icon" className="header-icon" />
           </a>
           <a href="https://mywestern.wwu.edu/" target="_blank" rel="noopener noreferrer">
-            <img src={img3} alt="Icon 1" className="header-icon" />
+            <img src={img3} alt="MyWestern Icon" className="header-icon" />
           </a>
           <a href="https://search.wwu.edu/?q=%20site%3Amywestern.wwu.edu" target="_blank" rel="noopener noreferrer">
-            <img src={img4} alt="Icon 2" className="header-icon" />
+            <img src={img4} alt="Search Icon" className="header-icon" />
           </a>
         </div>
       </h1>
+
       <Subheader />
-      <div className="gif-container">
-        <a rel="noopener noreferrer">
-          <img src={gif} alt="Animation" className="gif" />
-        </a>
+
+      <div className="image-container">
+        <img src={gif} alt="Western Washington University" className="gif" />
       </div>
+
       <h2 className="committee-main-title">STUDENT COMMITTEES</h2>
-      {committees.map((committee, index) => {
-        const sectionKey = committee.title.toLowerCase().replace(' ', '_');
-        return (
-          <div key={index}>
-            <div
-              className="committee-header"
-              onClick={() => toggleSection(sectionKey)}
-            >
-              <h2 className={`committee-title ${committee.isUncategorized ? 'uncategorized-title' : ''}`}>
-                {committee.title}
-                <span className="toggle-icon">
-                  {expandedSections[sectionKey] ? '▼' : '▶'}
-                </span>
-              </h2>
+
+      {loading ? (
+        <div className="loading-message">Loading committees...</div>
+      ) : (
+        <>
+          <CommitteeList committees={committees.slice(0, visibleCount)} />
+
+          {visibleCount < committees.length && (
+            <div className="load-more-container">
+              <button
+                className="load-more-button"
+                onClick={handleLoadMore}
+              >
+                Load More
+              </button>
             </div>
-            {expandedSections[sectionKey] && (
-              <CommitteeList 
-                committees={[committee]} howTitle={false}
-                // Pass the links to CommitteeList
-                committeeLinks={committeeLinks}
-              />
-            )}
-          </div>
-        );
-      })}
+          )}
+        </>
+      )}
+
       <Toaster position="top-center" reverseOrder={false} />
       <Footer />
     </div>
