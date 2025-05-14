@@ -44,9 +44,8 @@ def full_pages_table(cur: Cursor) -> list[dict[str, Any]]:
 @app.route('/pages.json')
 def pages_list():
     table = []
-    db_path = os.path.join(os.path.dirname(__file__), '../wwucrawler/pages.db')
-    if os.path.isfile(db_path):
-        with connect(db_path) as db_con:
+    if os.path.isfile("../pages.db"):
+        with connect("../pages.db") as db_con:
             table = full_pages_table(db_con.cursor())
     
     return jsonify(table)
