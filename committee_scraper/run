@@ -1,5 +1,15 @@
 #!/bin/bash
 
-.env/bin/python committee_scraper.py \
-	&& echo "Search complete! Check data.json and links.txt for results."
+GREEN="\033[0;32m"
+RED="\033[0;31m"
+NC="\033[0m"
+MODEL=${1:-"None"}
+MIN_SCORE=${2:-5}
 
+python3 src --model $MODEL --min_score $MIN_SCORE
+
+if [ $? -eq 0 ]; then
+  echo -e "${GREEN}Summarization complete${NC}"
+else
+  echo -e "${RED}Summarization terminated${NC}"
+fi
