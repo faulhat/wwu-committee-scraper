@@ -3,13 +3,13 @@ Tom's wwu.edu crawler program
 Can be used to search the domain to an arbitrary (or unlimited) depth for an arbitrary number of keywords
 """
 
-import requests, sys, queue, time
+import requests, sys, time
 from bs4 import BeautifulSoup
-from queue import Queue
 from urls import *
 from pages_db import PagesDB
 from search import search
 from multiprocessing import Process, JoinableQueue, Manager, Event, Value, Lock
+from fingerprints import min_set_distance
 
 
 def print_reprint_count(msg, lock, total, f=sys.stderr):
@@ -28,6 +28,8 @@ class Crawler:
         black_subdomains=[],
         black_urls=[],
         n_workers=6,
+        canon_fps=None,
+        canon_w2p=None,
     ):
         self.db_path = db_path
         self.root = root
@@ -37,6 +39,8 @@ class Crawler:
         self.black_subdomains = set(black_subdomains)
         self.black_urls = set(black_urls)
         self.n_workers = n_workers
+        self.canon_fps = canon_fps
+        self.canon_w2p = canon_w2p
 
     def start(self):
         start = time.time()
@@ -70,18 +74,17 @@ class Crawler:
 
             url_queue.join()
             for worker in workers:
-                url_queue.put(None) # Shutdown signal
+                url_queue.put(None)  # Shutdown signal
 
             for worker in workers:
                 worker.join()
-            
+
             elapsed = time.time() - start
             with PagesDB(self.db_path) as db:
                 total = db.count_pages()
                 print(f"Total scanned: {total}")
                 print(f"Time elapsed (total):   {elapsed:.2f}s")
                 print(f"             (per url): {elapsed/total:.2f}s")
-
 
     def crawl(
         self,
@@ -96,24 +99,38 @@ class Crawler:
             db.setup()
             while (next_url := url_queue.get()) is not None:
                 url, layer = next_url
-                print_reprint_count(f"[{my_id}] ({layer}) {url}", print_lock, total_scanned)
+                print_reprint_count(
+                    f"[{my_id}] ({layer}) {url}", print_lock, total_scanned
+                )
 
+                res = None
                 try:
                     res = requests.get(url, timeout=(3, 10))
+                    res.raise_for_status()
                 except TimeoutError:
                     print_reprint_count("Timed out", print_lock, total_scanned)
                 except requests.exceptions.RequestException as e:
-                    print_reprint_count(f"Couldn't retrieve page: {e.__str__()}", print_lock, total_scanned)
+                    print_reprint_count(
+                        f"Couldn't retrieve page: {e.__str__()}",
+                        print_lock,
+                        total_scanned,
+                    )
 
-                if res.status_code == 200:
+                if res is not None and res.status_code == 200:
                     soup = BeautifulSoup(res.text, "html.parser")
                     title = soup.title.string if soup.title else None
 
                     text = re.sub(r"\s+", " ", soup.text.strip())
                     terms = search(text, self.keywords)
-                    db.add_page(url, title, terms, terms.total, text)
+                    score = terms.total
+                    if score > 0 and self.canon_fps is not None:
+                        score = 1 - min_set_distance(
+                            text, self.canon_fps, self.canon_w2p
+                        )
+
+                    db.add_page(url, title, terms, score, text)
                     total_scanned.value = db.count_pages()
-                    
+
                     if not self.bounded or layer < self.max_depth:
                         new_links = [
                             a["href"] for a in soup.find_all("a") if a.has_attr("href")
@@ -125,7 +142,13 @@ class Crawler:
                                     link += "/"
 
                                 skip = False
-                                if link.startswith("/"):
+                                if link.startswith("//"):
+                                    link = "https:" + link
+                                    skip = (
+                                        strip_query(link) == strip_query(url)
+                                        or link in self.black_urls
+                                    )
+                                elif link.startswith("/"):
                                     domain = get_domain(url)
                                     link = "https://" + domain + link
                                     skip = (
@@ -149,9 +172,9 @@ class Crawler:
                                         if link not in seen:
                                             seen[link] = 1
                                             url_queue.put((link, layer + 1))
-                
+
                 url_queue.task_done()
-            
+
             url_queue.task_done()
             print_reprint_count(f"[{my_id}] done!", print_lock, total_scanned)
 

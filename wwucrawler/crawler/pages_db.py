@@ -50,7 +50,7 @@ class PagesDB:
             (url, title, json.dumps(terms.appearances), score, text, summary),
         )
         self.con.commit()
-    
+
     def count_pages(self):
         cur = self.con.cursor()
         cur.execute("SELECT COUNT() FROM pages")

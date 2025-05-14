@@ -71,38 +71,48 @@
     </table>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        pages = []
+
+        function getPages() {
             fetch('/pages.json')
                 .then(response => response.json())
                 .then(data => {
-                    const tbody = document.getElementById('tableBody');
-                    data.forEach(committee => {
-                        const row = document.createElement('tr');
-                        
-                        // URL columnm
-                        const urlCell = document.createElement('td');
-                        const link = document.createElement('a');
-                        link.href = committee.url;
-                        link.textContent = committee.title;
-                        urlCell.appendChild(link);
-                        
-                        // Summary column
-                        const summaryCell = document.createElement('td');
-                        summaryCell.innerHTML = committee.summary;
-                        
-                        // score column
-                        const scoreCell = document.createElement('td');
-                        scoreCell.className = 'score';
-                        scoreCell.textContent = `${committee.score}`;
-                        
-                        row.appendChild(urlCell);
-                        row.appendChild(summaryCell);
-                        row.appendChild(scoreCell);
-                        tbody.appendChild(row);
-                    });
+                    if (data.length > pages.length) {
+                        const tbody = document.getElementById('tableBody');
+                        tbody.innerHTML = "";
+                        data.forEach(committee => {
+                            const row = document.createElement('tr');
+                            
+                            // URL columnm
+                            const urlCell = document.createElement('td');
+                            const link = document.createElement('a');
+                            link.href = committee.url;
+                            link.textContent = committee.title;
+                            urlCell.appendChild(link);
+                            
+                            // Summary column
+                            const summaryCell = document.createElement('td');
+                            summaryCell.innerHTML = committee.summary;
+                            
+                            // score column
+                            const scoreCell = document.createElement('td');
+                            scoreCell.className = 'score';
+                            scoreCell.textContent = `${committee.score.toFixed(2)}`;
+                            
+                            row.appendChild(urlCell);
+                            row.appendChild(summaryCell);
+                            row.appendChild(scoreCell);
+                            tbody.appendChild(row);
+                        });
+                    }
+
+                    pages = data;
                 })
                 .catch(error => console.error('ERMMM Somthing went wrong, loading committee data:', error));
-        });
+        }
+        
+        document.addEventListener("DOMContentLoaded", getPages)
+        setInterval(getPages, 10000)
     </script>
 </body>
 </html>

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm -f tmp_pages.db
+./run -d2 -t tmp_pages.db $@
