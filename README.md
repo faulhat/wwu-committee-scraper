@@ -21,9 +21,9 @@ pip install -r requirements.txt
 ## Crawler
 Tom Faulhaber
 
-The setup process is the same as with the server program; just run the same commands in the `crawler` directory.
+The setup process is the same as with the server program; just run the same commands in the `wwucrawler` directory.
 
-Then, you can do `./wwucrawler.py -h` for instructions on how to use the program.
+Then, you can do `python crawler -h` for instructions on how to use the program.
 
 ## Summarizer
 Kyle Downing
