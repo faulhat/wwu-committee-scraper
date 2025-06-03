@@ -11,14 +11,16 @@ class PagesDB:
         self.con.cursor().execute(
             """
             CREATE TABLE IF NOT EXISTS pages (
-                id          INTEGER PRIMARY KEY AUTOINCREMENT,
-                url         TEXT NOT NULL,
-                title       TEXT,
-                terms       TEXT NOT NULL,
-                score       REAL,
-                full_text   TEXT NOT NULL,
-                summary     TEXT NOT NULL,
-                retrieved   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+                url                 TEXT NOT NULL,
+                title               TEXT,
+                terms               TEXT NOT NULL,
+                score               REAL,
+                full_text           TEXT NOT NULL,
+                summary_before      TEXT NOT NULL,
+                summary_keyword     TEXT NOT NULL,
+                summary_after       TEXT NOT NULL,
+                retrieved           TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
             """
         )
@@ -27,27 +29,30 @@ class PagesDB:
         return self.con
 
     def add_page(self, url, title, terms, score, text):
-        summary = ""
+        summary_before = ""
+        summary_keyword = ""
+        summary_after = ""
+
         if terms.total == 0:
             if len(text) > 103:
-                summary = text[:100] + "..."
+                summary_before = text[:100] + "..."
             else:
-                summary = text
+                summary_before = text
         else:
             if terms.first > 13:
-                summary = "..." + text[terms.first - 10 : terms.first]
+                summary_before = "..." + text[terms.first - 10 : terms.first]
             else:
-                summary = text[terms.first - 13 : terms.first]
+                summary_before = text[terms.first - 13 : terms.first]
 
-            summary += "<b>" + text[terms.first : terms.end] + "</b>"
-            if len(summary) + len(text[terms.end :]) > 103:
-                summary += text[terms.end : terms.end + 100] + "..."
+            summary_keyword = text[terms.first : terms.end]
+            if len(summary_before) + len(summary_keyword) + len(text[terms.end :]) > 103:
+                summary_after = text[terms.end : terms.end + 100] + "..."
             else:
-                summary += text[terms.end :]
+                summary_after = text[terms.end :]
 
         self.con.cursor().execute(
-            "INSERT INTO pages (url, title, terms, score, full_text, summary) VALUES (?, ?, ?, ?, ?, ?)",
-            (url, title, json.dumps(terms.appearances), score, text, summary),
+            "INSERT INTO pages (url, title, terms, score, full_text, summary_before, summary_keyword, summary_after) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            (url, title, json.dumps(terms.appearances), score, text, summary_before, summary_keyword, summary_after),
         )
         self.con.commit()
 
@@ -59,13 +64,16 @@ class PagesDB:
     def dump_results(self, f=sys.stderr):
         cur = self.con.cursor()
         cur.execute(
-            "SELECT url, title, terms, score, summary, retrieved FROM pages WHERE score > 0"
+            "SELECT url, title, terms, score, summary_before, summary_keyword, summary_after, retrieved FROM pages WHERE score > 0"
         )
         rows = cur.fetchall()
-        for url, title, terms, score, summary, retrieved in rows:
+        for url, title, terms, score, summary_before, summary_keyword, summary_after, retrieved in rows:
             print(f'{url} @ {retrieved} "{title}"', file=f)
             print(f"\t{terms}\n\t{score}", file=f)
-            print(f"\t{summary}\n", file=f)
+            if summary_keyword:
+                print(f"\t{summary_before}**{summary_keyword}**{summary_after}\n", file=f)
+            else:
+                print(f"\t{summary_before}\n", file=f)
 
     def __enter__(self):
         return self

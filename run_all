@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cd wwucrawler
+./run &> ../crawler.log &
+if [ $? -eq 0 ]; then
+    echo 'Crawler running! Do `tail -f crawler.log` to see its progress.'
+    cd ../flaskapp
+    .env/bin/python app.py
+else
+    echo 'Failed to start crawler. Giving up...'
+fi
