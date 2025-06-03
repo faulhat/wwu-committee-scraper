@@ -2,7 +2,7 @@
 
 In the project root directory, do:
 ```
-./setup && ./run
+./setup_all && ./run_all
 ```
 
 This will start a local server on port 5000 and run the web crawler in the background. To check on the crawler's progress, do:
