@@ -1,0 +1,19 @@
+#!/bin/bash
+
+cd wwucrawler/
+if [ ! -d .env ]; then
+	python3 -m venv .env
+fi
+
+.env/bin/pip install -r requirements.txt
+
+cd ../flaskapp/
+
+if [ ! -d .env ]; then
+	python3 -m venv .env
+fi;
+
+.env/bin/pip install -r requirements.txt
+
+cd ../frontend/
+npm run build

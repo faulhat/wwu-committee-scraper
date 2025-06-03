@@ -16,7 +16,11 @@ function Committee({ committee }) {
         <h2 className="committee-title">
           {formatTitle(committee.title, committee.url)}
         </h2>
-        <p className="committee-description">{committee.summary}</p>
+        <p className="committee-description">
+          { committee.summary_before }
+          <b>{ committee.summary_keyword }</b>
+          { committee.summary_after }
+        </p>
         <div className="committee-actions">
 
           -<a
