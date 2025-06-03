@@ -1,0 +1,30 @@
+AS Student
+ASWWU Student
+Student VP
+Student Vice President
+Student Senate President
+ASWWU Senate President
+Senator-CSE
+Senator-CHSS
+Senator-CBE
+Senator-CFPA 
+Senator-CFPA 
+Senator-CENV 
+Senator-Fairhaven 
+Senator-At-large 
+ASVP for Governmental Affairs 
+ASVP for Student Services 
+ASVP for Sustainability 
+ASVP for Activities 
+AS President 
+ASVP for University Operations 
+ASVP for Diversity 
+ASWWU VP for Governmental Affairs 
+ASWWU VP for Student Services 
+ASWWU VP for Sustainability 
+ASWWU VP for Activities 
+ASWWU VP President 
+ASWWU VP for University Operations 
+ASWWU VP for Diversity
+At-large
+At-large student

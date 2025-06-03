@@ -7,7 +7,7 @@ import requests, sys, time
 from bs4 import BeautifulSoup
 from urls import *
 from pages_db import PagesDB
-from search import search
+from search import tiered_search
 from multiprocessing import Process, JoinableQueue, Manager, Event, Value, Lock
 from fingerprints import min_set_distance
 
@@ -121,13 +121,15 @@ class Crawler:
                     title = soup.title.string if soup.title else None
 
                     text = re.sub(r"\s+", " ", soup.text.strip())
-                    terms = search(text, self.keywords)
+                    terms = tiered_search(text, self.keywords)
                     score = terms.total
+                    """
                     if score > 0 and self.canon_fps is not None:
-                        score = 1 - min_set_distance(
+                        score *= 1 - min_set_distance(
                             text, self.canon_fps, self.canon_w2p
                         )
-
+                    """
+                        
                     db.add_page(url, title, terms, score, text)
                     total_scanned.value = db.count_pages()
 

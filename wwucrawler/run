@@ -2,7 +2,7 @@
 
 OUT_FILE=output.txt
 DEPTH=2
-KEYWORDS=("Committee" "committee" "associated students" "ASWWU" "AS" "board" "at-large" "student ambassador")
+KEYWORD_FILE=keywords.txt
 
 rm -f ../pages.db
 .env/bin/python crawler -o"$OUT_FILE" -d"$DEPTH" $@ "${KEYWORDS[@]}" &&
