@@ -44,7 +44,8 @@ class Scraper:
             if cursor is not None:
                 try:
                     contact = "\nContact: " + utils.extract_emails(current_pd.emails) if len(current_pd.emails) > 0 else ""
-                    cursor.execute("UPDATE pages SET summary = (?) WHERE url = (?)",
+                    cursor.execute("UPDATE pages SET summary_before = (?), summary_keyword = '', summary_after = '' "
+                                   "WHERE url = (?)",
                                    (current_pd.summary + contact,
                                     current_pd.url))
                     self.db_connection.commit()
