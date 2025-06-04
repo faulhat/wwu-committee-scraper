@@ -26,8 +26,6 @@ class PagesDB:
         )
         self.con.commit()
 
-        return self.con
-
     def add_page(self, url, title, terms, score, text):
         summary_before = ""
         summary_keyword = ""

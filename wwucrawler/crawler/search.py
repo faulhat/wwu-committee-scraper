@@ -12,6 +12,27 @@ class SearchRes:
         self.total = total
 
 
+def tiered_search(text, keyword_list):
+    score = 0
+    result = search(text, keyword_list[0])
+    result.total *= len(keyword_list)
+    for i, tier in enumerate(keyword_list[1:]):
+        t_res = search(text, tier)
+        for term, num in t_res.appearances.items():
+            if term in result.appearances:
+                result.appearances[term] += num
+            else:
+                result.appearances[term] = num
+
+        if result.first == -1:
+            result.first = t_res.first
+            result.end = t_res.end
+        
+        result.total += (len(keyword_list) - i - 1) * t_res.total
+
+    return result
+
+
 # Search a document for given keywords
 # TODO:  Make this use a trie
 def search(text, terms):
