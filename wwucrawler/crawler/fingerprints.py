@@ -40,6 +40,15 @@ def min_set_distance(text, canon_fps, w2p):
 
     return mindist
 
+def avg_set_distance(text, canon_fps, w2p):
+    sum_total = 0
+    text_fp = calc_comparison_fingerprint(text, w2p)
+    for fp in canon_fps:
+        distance = np.sum(np.abs(text_fp - fp))
+        sum_total += distance
+
+    return sum_total / len(canon_fps)
+
 
 def texts_from_urls(urls):
     texts = []
