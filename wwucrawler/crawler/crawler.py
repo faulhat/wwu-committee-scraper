@@ -9,7 +9,7 @@ from urls import *
 from pages_db import PagesDB
 from search import tiered_search
 from multiprocessing import Process, JoinableQueue, Manager, Event, Value, Lock
-from fingerprints import min_set_distance
+from fingerprints import avg_set_distance
 
 
 def print_reprint_count(msg, lock, total, f=sys.stderr):
@@ -123,12 +123,10 @@ class Crawler:
                     text = re.sub(r"\s+", " ", soup.text.strip())
                     terms = tiered_search(text, self.keywords)
                     score = terms.total
-                    """
-                    if score > 0 and self.canon_fps is not None:
-                        score *= 1 - min_set_distance(
+                    if score > 1 and self.canon_fps is not None:
+                        score *= 2 - avg_set_distance(
                             text, self.canon_fps, self.canon_w2p
                         )
-                    """
                         
                     db.add_page(url, title, terms, score, text)
                     total_scanned.value = db.count_pages()
