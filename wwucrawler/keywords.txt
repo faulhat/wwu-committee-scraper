@@ -27,4 +27,19 @@ ASWWU VP President
 ASWWU VP for University Operations 
 ASWWU VP for Diversity
 At-large
+at-large
 At-large student
+At-Large Student
+
+#
+Committee
+committee
+Council
+council
+Members
+Membership
+
+#
+Board
+board
+Charter

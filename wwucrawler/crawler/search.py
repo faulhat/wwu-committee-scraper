@@ -18,13 +18,18 @@ def tiered_search(text, keyword_list):
     result.total *= len(keyword_list)
     for i, tier in enumerate(keyword_list[1:]):
         t_res = search(text, tier)
-        result.appearances |= t_res.appearances
-        if result.first == -1 or t_res.first < result.first:
+        for term, num in t_res.appearances.items():
+            if term in result.appearances:
+                result.appearances[term] += num
+            else:
+                result.appearances[term] = num
+
+        if result.first == -1:
             result.first = t_res.first
             result.end = t_res.end
         
         result.total += (len(keyword_list) - i - 1) * t_res.total
-    
+
     return result
 
 
