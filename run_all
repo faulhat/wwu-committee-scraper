@@ -1,11 +1,20 @@
 #!/bin/bash
 
-cd wwucrawler
+cd wwucrawler/
 ./run &> ../crawler.log &
 if [ $? -eq 0 ]; then
     echo 'Crawler running! Do `tail -f crawler.log` to see its progress.'
-    cd ../flaskapp
-    .env/bin/python app.py
+
+    cd ../committee_scraper/
+    ./run &> ../summarizer.log &
+    if [ $? -eq 0 ]; then
+        echo 'Summarizer running! Do `tail -f summarizer.log` to see its progress.'
+        
+        cd ../flaskapp/
+        .env/bin/python app.py
+    else
+        echo 'Failed to start summarizer. Giving up...'
+    fi
 else
     echo 'Failed to start crawler. Giving up...'
 fi
