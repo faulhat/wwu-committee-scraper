@@ -6,7 +6,7 @@ NC="\033[0m"
 MODEL=${1:-"None"}
 MIN_SCORE=${2:-5}
 
-python3 src --model $MODEL --min_score $MIN_SCORE
+.env/bin/python src --model $MODEL --min_score $MIN_SCORE
 
 if [ $? -eq 0 ]; then
   echo -e "${GREEN}Summarization complete${NC}"
