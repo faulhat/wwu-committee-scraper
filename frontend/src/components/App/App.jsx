@@ -63,8 +63,10 @@ function App() {
         <img src={gif} alt="Western Washington University" className="gif" />
       </div>
 
-      <h2 className="committee-main-title">STUDENT COMMITTEES</h2>
-
+      <h2 className="committee-main-title">STUDENT COMMITTEES
+        <a href="/pages.xlsx">: Export</a>
+      </h2>
+      
       {loading ? (
         <div className="loading-message">Loading committees...</div>
       ) : (
