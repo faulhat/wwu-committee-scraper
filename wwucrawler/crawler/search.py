@@ -12,6 +12,9 @@ class SearchRes:
         self.total = total
 
 
+# Search with keywords of varying priority
+#  Keywords on the first priority tier out of n will count for n points each,
+#  those on the second tier count for n-1, and so on.
 def tiered_search(text, keyword_list):
     score = 0
     result = search(text, keyword_list[0])
@@ -27,7 +30,7 @@ def tiered_search(text, keyword_list):
         if result.first == -1:
             result.first = t_res.first
             result.end = t_res.end
-        
+
         result.total += (len(keyword_list) - i - 1) * t_res.total
 
     return result

@@ -7,6 +7,7 @@ def get_words(text):
     return re.findall(r"\w+", text)
 
 
+# Calculate a "fingerprint" (term frequency vector)
 def calc_comparison_fingerprint(text, word2pos):
     fingerprint = np.zeros((len(word2pos),))
     words = re.findall(r"\w+", text)
@@ -19,18 +20,20 @@ def calc_comparison_fingerprint(text, word2pos):
     return fingerprint
 
 
+# Generate fingerprints for canonical set
 def gen_canonical_fingerprints(canon_texts):
-    common_words = set(get_words(canon_texts[0]))
+    all_words = set(get_words(canon_texts[0]))
     for text in canon_texts[1:]:
-        common_words = common_words.union(set(get_words(text)))
+        all_words = all_words.union(set(get_words(text)))
 
     w2p = {}
-    for word in common_words:
+    for word in all_words:
         w2p[word] = len(w2p)
 
     return [calc_comparison_fingerprint(text, w2p) for text in canon_texts], w2p
 
 
+# Lowest distance to a canonical set fingerprint
 def min_set_distance(text, canon_fps, w2p):
     mindist = np.inf
     text_fp = calc_comparison_fingerprint(text, w2p)
@@ -40,6 +43,8 @@ def min_set_distance(text, canon_fps, w2p):
 
     return mindist
 
+
+# Average distance to all canonical set fingerprints
 def avg_set_distance(text, canon_fps, w2p):
     sum_total = 0
     text_fp = calc_comparison_fingerprint(text, w2p)
@@ -50,6 +55,7 @@ def avg_set_distance(text, canon_fps, w2p):
     return sum_total / len(canon_fps)
 
 
+# Retrieve canonical set
 def texts_from_urls(urls):
     texts = []
     for url in urls:

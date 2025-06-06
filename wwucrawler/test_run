@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Run crawler to depth 2 without affecting the main database
+
 OUT_FILE=output.txt
 DEPTH=2
 KEYWORD_FILE=keywords.txt
