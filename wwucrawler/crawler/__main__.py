@@ -1,3 +1,8 @@
+"""
+Tom's wwu.edu crawler program
+Can be used to search the domain to an arbitrary (or unlimited) depth for an arbitrary number of keywords
+"""
+
 import sys
 from traceback import print_exc
 
@@ -7,6 +12,8 @@ from fingerprints import *
 from argparse import ArgumentParser, REMAINDER
 
 
+# The canonical set of committee pages
+#  Candidate pages are boosted based on similarity to these.
 CANON_URLS = [
     "https://as.wwu.edu/committees/as-finance-council/",
     "https://as.wwu.edu/committees/as-student-trustee-selection-committee/",
@@ -16,6 +23,8 @@ CANON_URLS = [
     "https://as.wwu.edu/committees/sehome-hill-arboretum-board-of-governors/",
 ]
 
+# Subdomains for the crawler to ignore
+#  They have a lot of pages, none of which are relevant.
 BLACK_SUBDOMAINS = ["cedar", "catalog"]
 
 
@@ -36,6 +45,10 @@ def parse_args():
     return parser.parse_args()
 
 
+# Retrieve tiered keyword file
+# Format: keywords are listed from highest to lowest priority
+#  Priority tiers are separated by lines containing only '#'
+# The first tier of keywords.txt contains the keywords supplied by our client.
 def parse_keyword_file(filename):
     with open(filename, "r") as f:
         lines = [line.strip() for line in f.readlines()]

@@ -13,5 +13,7 @@ def get_domain_subdomain(url):
     return domain, subdomain
 
 
+# Get rid of the GET request query
+#  Needed since some pages contain recursive links
 def strip_query(url):
     return url.split("?")[0]
