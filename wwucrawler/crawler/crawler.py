@@ -1,8 +1,3 @@
-"""
-Tom's wwu.edu crawler program
-Can be used to search the domain to an arbitrary (or unlimited) depth for an arbitrary number of keywords
-"""
-
 import requests, sys, time
 from bs4 import BeautifulSoup
 from urls import *
@@ -12,6 +7,8 @@ from multiprocessing import Process, JoinableQueue, Manager, Event, Value, Lock
 from fingerprints import avg_set_distance
 
 
+# Print the next line of the crawler output while keeping a running total
+#  of the number of documents scanned at the bottom of the screen.
 def print_reprint_count(msg, lock, total, f=sys.stderr):
     with lock:
         print(f"\33[2K\r{msg}\nTotal scanned: {total.value}", file=f, end="\r")
@@ -42,6 +39,7 @@ class Crawler:
         self.canon_fps = canon_fps
         self.canon_w2p = canon_w2p
 
+    # Start the worker threads
     def start(self):
         start = time.time()
         with Manager() as manager:
@@ -72,6 +70,7 @@ class Crawler:
             for worker in workers:
                 worker.start()
 
+            # Join once all tasks are complete
             url_queue.join()
             for worker in workers:
                 url_queue.put(None)  # Shutdown signal
@@ -123,14 +122,17 @@ class Crawler:
                     text = re.sub(r"\s+", " ", soup.text.strip())
                     terms = tiered_search(text, self.keywords)
                     score = terms.total
+
+                    # Boost documents which are closer to our canonical set
                     if score > 1 and self.canon_fps is not None:
                         score *= 2 - avg_set_distance(
                             text, self.canon_fps, self.canon_w2p
                         )
-                        
+
                     db.add_page(url, title, terms, score, text)
                     total_scanned.value = db.count_pages()
 
+                    # Find the links on the page and add them to the queue
                     if not self.bounded or layer < self.max_depth:
                         new_links = [
                             a["href"] for a in soup.find_all("a") if a.has_attr("href")
@@ -177,7 +179,3 @@ class Crawler:
 
             url_queue.task_done()
             print_reprint_count(f"[{my_id}] done!", print_lock, total_scanned)
-
-    def search_page(self, page_txt):
-        words = set(page_txt.split())
-        return set.intersection(self.keywords, words)
