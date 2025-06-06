@@ -30,7 +30,7 @@ def data(subpath):
     else:
         return send_from_directory("data/", subpath)
 
-
+# Fetch the json data from the database.
 @app.route("/pages.json")
 def pages_list():
     table = []
@@ -59,7 +59,7 @@ def dist(subpath):
             os.path.join(os.path.dirname(__file__), "../frontend/dist/", subpath)
         )
 
-
+# Displaying the database to the front end, and to the localhost server created by the flaskapp.
 def full_pages_table(cur: Cursor) -> list[dict[str, Any]]:
     cur.execute(
         "SELECT url, title, score, summary_before, summary_keyword, summary_after FROM pages WHERE score > 0 ORDER BY score DESC"
@@ -81,7 +81,7 @@ def full_pages_table(cur: Cursor) -> list[dict[str, Any]]:
 
     return results
 
-
+# P1 goal: Be able to export the database into an excel file.
 def dump_to_excel(db_path, excel_path):
    conn = connect(db_path)
    table_name = "pages"
