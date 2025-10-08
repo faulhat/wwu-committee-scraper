@@ -1,25 +1,40 @@
+from typing import Any
+
 import requests
 import sys
 from bs4 import BeautifulSoup
 from sqlite3 import Connection
-from ollama import Client
+from google import genai
+
 import utils
 
-summarize_prompt = """Summarize the following webpage content in exactly one sentence, between 10 and 25 words.
-Do not include any explanations, introductions, or markdown formatting."""
+summarize_prompt = """
+Summarize the main content of the following webpage HTML in exactly one sentence (between 10 and 25 words).
+Ignore HTML tags, navigation bars, headers, footers, and boilerplate content.
+Do not include explanations, introductions, or any formatting.
+Return only the summary sentence.
+"""
 
 extract_prompt = """
-Extract a list of STUDENT committee positions from the following university webpage text.
-Return ONLY a valid list [].
-If there are no CLEAR declarations of a position
-or the website does not reference a committee, then return an empty list. Do not return any context
+Extract student committee positions from the following university webpage text.
+
+Return ONLY a JSON-style list of key-value pairs, where each key is a position title and the value is the number of positions available:
+Example format: [{"Chair": 2}, {"Member": 5}]
+
+Only include positions explicitly labeled or clearly implied to be STUDENT roles on committees.
+
+If no student committee positions are clearly mentioned, or if the page does not reference any committees, return an empty list: []
+
+Do not include explanations, introductions, or any formatting.
 """
 
 
 class Scraper:
     def __init__(self, model: str, score_threshold: int, db_connection: Connection):
+
         self.model = None if model == "None" else model
-        self.client = Client()
+        self.client = genai.Client(api_key="")
+
         self.db_connection = db_connection
         self.score_threshold = score_threshold / 100
         self.URLS = []
@@ -111,27 +126,29 @@ class Scraper:
 
         def _set_summary(self) -> str:
             try:
-                response = self.scraper.client.generate(model=self.scraper.model,
-                                                        prompt=self.soup.get_text(strip=True, separator='\n')
+                response = self.scraper.client.models.generate_content(model=self.scraper.model,
+                                                        contents=self.soup.get_text(strip=True, separator='\n')
                                                         + summarize_prompt)
             except Exception as e:
+                print(e.__str__(), file=sys.stderr)
                 return "<N/A>"
-            return response.response
+            return response.text
 
         def _set_positions(self) -> [str]:
             try:
-                response = self.scraper.client.generate(model=self.scraper.model,
-                                                        prompt=self.soup.get_text(strip=True, separator='\n')
+                response = self.scraper.client.models.generate_content(model=self.scraper.model,
+                                                        contents=self.soup.get_text(strip=True, separator='\n')
                                                         + extract_prompt)
             except Exception as e:
+                print(e.__str__(), file=sys.stderr)
                 return "<N/A>"
-            return response.response
+            return response.text
 
-        def _set_emails(self) -> [str]:
+        def _set_emails(self) -> list[Any]:
             return ([email_obj.text for email_obj in self.soup.find_all("a")
                      if email_obj.text.__contains__("@") and utils.validate_email(email_obj.text)])
 
-        def _set_doc_links(self) -> [str]:
+        def _set_doc_links(self) -> list[Any]:
             return [file['href'] for file in self.soup.find_all("a", href=True) if file['href'].__contains__('.pdf')]
 
         def print_state(self) -> None:
