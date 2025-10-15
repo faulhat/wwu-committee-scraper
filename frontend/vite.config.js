@@ -11,17 +11,17 @@ export default defineConfig({
   server: {
     port: 5174,  // make sure this matches the port you actually use
     proxy: {
-      // Proxy /pages.json → your Flask backend
-      '/pages.json': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
-      },
-      // Proxy anything under /data/ to Flask’s /data/
-      '/data': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
-        // If your Flask route is /data/<path>, this rewrite preserves it:
-        rewrite: (path) => path.replace(/^\/data/, '/data'),
+    // Make sure requests to /pages.json go to Flask backend
+    '^/pages.json$': {
+      target: 'http://127.0.0.1:5000',
+      changeOrigin: true,
+      secure: false,
+    },
+    // Catch all /data/ routes
+    '/data': {
+      target: 'http://127.0.0.1:5000',
+      changeOrigin: true,
+      rewrite: (path) => path.replace(/^\/data/, '/data'),
       },
     }
   }
