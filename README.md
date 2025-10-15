@@ -49,7 +49,7 @@ If you need, read the documentation to understand how to use the API to generate
 
 If you are using this program for the first time, you will need an API key. This may be proivded with the project in an enviorment variable, or you could generate your own. Note that with a shared API key, requests from differnet hosts at once may overload the rate limit. Thus, if you are running this project on a local machine you may want to generate your own API key anyways. The following link will direct you to the page where you can request to create an API key. You will need a google account to link this key to, but you will be able to proceeed with a free tier. This free tier will have a strict rate limit and token limit, which should not be exceeded. 
 
-- [API Key](https://https://aistudio.google.com/api-keys)
+- [API Key](https://aistudio.google.com/api-keys)
 
 Once you have an API key, you should be able to proceed with running the summarizer. Navigate to the **committee_scraper** directory and ensure you will run the program on an interperter with the relevant dependicies installed. The most important of which is the **google-genai** package. This will contian the functions needed to use the API:
 
