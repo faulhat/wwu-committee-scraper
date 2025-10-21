@@ -2,3 +2,7 @@
 **/.env/
 **/__pycache__/
 .DS_STORE
+pages.db
+output.txt
+crawler.log
+summarizer.log

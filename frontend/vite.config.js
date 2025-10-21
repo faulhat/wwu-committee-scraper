@@ -11,13 +11,12 @@ export default defineConfig({
   server: {
     port: 5174,  // make sure this matches the port you actually use
     proxy: {
-    // Make sure requests to /pages.json go to Flask backend
+    // It was literally just this fml
     '^/pages.json$': {
       target: 'http://127.0.0.1:5000',
       changeOrigin: true,
       secure: false,
     },
-    // Catch all /data/ routes
     '/data': {
       target: 'http://127.0.0.1:5000',
       changeOrigin: true,
