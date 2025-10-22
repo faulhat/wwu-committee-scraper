@@ -9,6 +9,15 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow to give the lifted effect */
   background-color: hsl(0, 0%, 98%); /* Light background for the committee card */
   border-radius: 8px; /* Rounded corners */
+  transition: all;
+  transition-duration: 0.5s;
+  box-shadow: 5px;
+}
+
+.Committee:hover {
+  transform: translateY(-7.5px);
+  cursor: pointer;
+  box-shadow: 15px;
 }
 
 .committee-title {
@@ -16,19 +25,23 @@
   background-color: #003F87; /* Blue background for title */
   padding: 4px;
   border-radius: 4px;
-  text-align: Left;
-  font-size: 25px; /* Adjusted to match your h2 size */
-  font-weight: 900; /* Bold text */
+  text-align: center;
+  font-size: 20px; /* Adjusted to match your h2 size */
+  font-weight: 100; /* Bold text */
   margin-bottom: 10px;
   font-family: Trueno, sans-serif;
 }
 
 .committee-description {
   color: #333; /* Black text for description */
-  font-size: 0.88rem; /* Adjusted to match your p size */
-  font-weight: 300; /* Light text */
-  line-height: 1rem; /* Adjusted line height */
+  font-size: 1.15rem; /* Adjusted to match your p size */
+  font-weight: 500; /* Light text */
+  line-height: 1.45rem; /* Adjusted line height */
+  padding: 5px;
+  text-align: center;
   margin-bottom: 10px;
+  max-width: 35ch;
+  margin: 0 auto;
 }
 
 .committee-bullet-points {
@@ -67,4 +80,8 @@
 .confidence-score,
 .committee-link {
   white-space: nowrap;
+  text-align: left;
+  padding: 0;
+  margin: 0;
 }
+

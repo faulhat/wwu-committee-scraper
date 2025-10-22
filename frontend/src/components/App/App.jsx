@@ -63,8 +63,7 @@ function App() {
         <img src={gif} alt="Western Washington University" className="gif" />
       </div>
 
-      <h2 className="committee-main-title">STUDENT COMMITTEES
-        <a href="/pages.xlsx">: Export</a>
+      <h2 className="committee-main-title">WWU Student Committees
       </h2>
       
       {loading ? (
@@ -77,8 +76,7 @@ function App() {
             <div className="load-more-container">
               <button
                 className="load-more-button"
-                onClick={handleLoadMore}
-              >
+                onClick={handleLoadMore}>
                 Load More
               </button>
             </div>
