@@ -1,6 +1,7 @@
 from typing import Any
 
 import requests
+import time
 import sys
 from bs4 import BeautifulSoup
 from sqlite3 import Connection
@@ -59,9 +60,11 @@ class Scraper:
             if cursor is not None:
                 try:
                     contact = "\nContact: " + utils.extract_emails(current_pd.emails) if len(current_pd.emails) > 0 else ""
-                    cursor.execute("UPDATE pages SET summary_before = (?), summary_keyword = '', summary_after = '' "
+                    cursor.execute("UPDATE pages SET summary_before = (?), summary_keyword = ?, summary_after = ? "
                                    "WHERE url = (?)",
-                                   (current_pd.summary + contact,
+                                   (current_pd.summary,
+                                    contact,
+                                    current_pd.positions,
                                     current_pd.url))
                     self.db_connection.commit()
                 except ConnectionError as e:
@@ -90,6 +93,7 @@ class Scraper:
                 if self.scraper.model is not None:
                     self.summary = self._set_summary()
                     self.positions = self._set_positions()
+                    time.sleep(30)
                 else:
                     self.summary = "<N/A>"
                     self.positions = "<N/A>"

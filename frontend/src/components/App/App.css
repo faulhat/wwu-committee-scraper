@@ -198,14 +198,14 @@ h1 {
 .committee-main-title {
   color: #003F87; /* Blue text */
   font-size: 2rem; /* Large font size */
-  font-weight: bold; /* Bold text */
+  font-weight: 400; /* Bold text */
   font-weight: 900;
-  text-align: left; /* Center the title */
+  text-align: center; /* Center the title */
+  padding: 10px;
   margin: 2rem 0 1rem 0; /* Add space above and below the title */
   font-family: Trueno, sans-serif;
+  border-radius: 10px;
   background-color: hsl(0, 0%, 98%); /* Light background for the committee card */
-
-
 }
 
 /* Styles for the right images container */
@@ -222,4 +222,8 @@ h1 {
 .header-icon {
   height: 50px; /* Adjust the height of the images */
   width: auto; /* Maintain aspect ratio */
+}
+
+.load-more-button {
+  margin: 25px;
 }
