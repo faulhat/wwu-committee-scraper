@@ -17,6 +17,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/pages.xlsx': {
+        target: 'http://127.0.0.1:5000',
+        changeOrigin: true,
+        secure: false,
+      },
       // Catch all /data/ routes
       '/data': {
         target: 'http://127.0.0.1:5000',

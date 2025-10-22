@@ -63,6 +63,7 @@ function App() {
         <img src={gif} alt="Western Washington University" className="gif" />
       </div>
 
+
       <h2 className="committee-main-title">WWU Student Committees
       </h2>
       

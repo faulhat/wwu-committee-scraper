@@ -12,7 +12,7 @@ parser.add_argument("--min_score", type=int, default=0, help="Min score of pages
 args = parser.parse_args()
 
 # DB file path
-db_path = "../../pages.db"
+db_path = "../pages.db"
 
 try:
     db_target = db_path
