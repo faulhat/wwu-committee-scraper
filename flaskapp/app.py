@@ -97,7 +97,7 @@ def dump_to_excel(db_path, excel_path):
    table_name = "pages"
    try:
        # Only return the following attributes:
-       df = pd.read_sql_query(f"SELECT url, title, score, terms, retrieved FROM {table_name};", conn)
+       df = pd.read_sql_query(f"SELECT * FROM pages;", conn)
    except Exception as e:
        print(f"Error reading table '{table_name}': {e}")
        conn.close()

@@ -13,18 +13,17 @@ summarize_prompt = """
 Summarize the main content of the following webpage HTML in exactly one sentence (between 10 and 25 words).
 Ignore HTML tags, navigation bars, headers, footers, and boilerplate content.
 Do not include explanations, introductions, or any formatting.
-Return only the summary sentence.
+Return only the summary sentence, and one additional line following stating whether the website directly references a committee or not.
 """
 
 extract_prompt = """
 Extract student committee positions from the following university webpage text.
 
-Return ONLY a JSON-style list of key-value pairs, where each key is a position title and the value is the number of positions available:
-Example format: [{"Chair": 2}, {"Member": 5}]
+Return ONLY a comma seperated list of each committee title that is available on the website.
 
 Only include positions explicitly labeled or clearly implied to be STUDENT roles on committees.
 
-If no student committee positions are clearly mentioned, or if the page does not reference any committees, return an empty list: []
+If no student committee positions are clearly mentioned, or if the page does not reference any committees, return the following: None
 
 Do not include explanations, introductions, or any formatting.
 """
@@ -33,8 +32,8 @@ Do not include explanations, introductions, or any formatting.
 class Scraper:
     def __init__(self, model: str, score_threshold: int, db_connection: Connection):
 
-        self.model = None if model == "None" else model
-        self.client = genai.Client(api_key="")
+        self.model = "gemini-2.5-flash"
+        self.client = genai.Client(api_key="AIzaSyBAjgK61OxLfKpkgX9yzIq67GKWA3klEnc")
 
         self.db_connection = db_connection
         self.score_threshold = score_threshold / 100
@@ -138,7 +137,7 @@ class Scraper:
                 return "<N/A>"
             return response.text
 
-        def _set_positions(self) -> [str]:
+        def _set_positions(self) -> str:
             try:
                 response = self.scraper.client.models.generate_content(model=self.scraper.model,
                                                         contents=self.soup.get_text(strip=True, separator='\n')
