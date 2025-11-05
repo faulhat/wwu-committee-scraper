@@ -57,3 +57,72 @@ def search(text, terms):
             total += 1
 
     return SearchRes(appearances, first, end, total)
+
+
+class TrieNode:
+    def __init__(self, terminal=False, term=None, occurrences=0, node=None):
+        self.terminal = terminal
+        self.term = term
+        self.node = node
+
+
+class Trie:
+    def __init__(self, terms):
+        self.terms = terms
+        self.root = [TrieNode() for i in range(256)]
+        for term in terms:
+            self.add_term(term)
+
+    def add_term(self, term):
+        for c in term:
+            if ord(c) > 255:
+                raise Exception("Tries can only use ASCII terms.")
+
+        n = self.root
+        for i, c in enumerate(term):
+            b = ord(c)
+            if i == len(term) - 1:
+                n[b].terminal = True
+                n[b].term = term
+                return n[b]
+            else:
+                if n[b].node is None:
+                    n[b].node = [TrieNode() for i in range(256)]
+
+                n = n[b].node
+
+    def get_node(self, term):
+        n = self.root
+        for i, c in enumerate(term):
+            b = ord(c)
+            if b > 255 or n[b].node is None:
+                return None
+            elif i == len(term) - 1:
+                return n[b] if n[b].terminal else None
+            else:
+                n = n[b].node
+
+    def search(self, text, terms):
+        appearances = {}
+        first = -1
+        end = -1
+        total = 0
+
+        i = 0
+        for i in range(len(text)):
+            n = self.root
+            for j, c in enumerate(text[i:]):
+                b = ord(c)
+                if b > 255 or n[b].node is None:
+                    break
+                elif n[b].node.terminal:
+                    if first < 0:
+                        first = i
+                        end = i + j
+
+                    appearances[n[b].node.term] = 1 + appearances.get(n[b].node.term, 0)
+                    total += 1
+
+                n = n[b].node
+
+        return SearchRes(appearances, first, end, total)

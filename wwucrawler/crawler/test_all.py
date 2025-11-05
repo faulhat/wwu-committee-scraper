@@ -3,7 +3,7 @@ import pytest
 from bs4 import BeautifulSoup
 
 from pages_db import PagesDB
-from search import SearchRes, search, tiered_search
+from search import SearchRes, Trie, search, tiered_search
 
 # Mock database
 test_db = PagesDB(":memory:")
@@ -39,6 +39,35 @@ def test_search():
         text = f.read()
         soup = BeautifulSoup(text, "html.parser")
         res = search(soup.text, expected_appearances.keys())
+        for term, num in expected_appearances.items():
+            assert term in res.appearances
+            assert res.appearances[term] == num
+
+        assert res.total == 8
+
+
+def test_trie():
+    terms = ["a", "aa", "into", "in", "hero", "heroic"]
+    t = Trie(terms)
+    for term in terms:
+        assert t.has_term(term)
+
+    assert not t.has_term("int")
+
+
+def test_trie_search():
+    expected_appearances = {
+        "vast": 1,
+        "inhabit": 1,
+        "portion": 1,
+        "the": 5,
+    }
+
+    with open("testdata/sample.html", "r") as f:
+        text = f.read()
+        soup = BeautifulSoup(text, "html.parser")
+        t = Trie(expected_appearances.keys())
+        res = t.search(soup.text)
         for term, num in expected_appearances.items():
             assert term in res.appearances
             assert res.appearances[term] == num
