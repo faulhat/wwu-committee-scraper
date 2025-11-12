@@ -53,6 +53,7 @@ def test_trie():
         assert t.has_term(term)
 
     assert not t.has_term("int")
+    assert not t.has_term("intoe")
 
 
 def test_trie_search():

@@ -1,4 +1,5 @@
 import re
+from queue import Queue
 
 
 # Result of searching a document
@@ -73,6 +74,20 @@ class Trie:
         for term in terms:
             self.add_term(term)
 
+    def print_all(self):
+        q = Queue()
+        q.put(("", self.root))
+        while not q.empty():
+            s, n = q.get()
+        for i, b in enumerate(n):
+            t = s + chr(i)
+            if b.node is not None:
+                q.put((t, b.node))
+
+            if b.terminal:
+                print(f"{t}, {b.term}")
+
+
     def add_term(self, term):
         for c in term:
             if ord(c) > 255:
@@ -95,14 +110,19 @@ class Trie:
         n = self.root
         for i, c in enumerate(term):
             b = ord(c)
-            if b > 255 or n[b].node is None:
+            if b > 255:
                 return None
             elif i == len(term) - 1:
                 return n[b] if n[b].terminal else None
+            elif n[b].node is None:
+                return None
             else:
                 n = n[b].node
 
-    def search(self, text, terms):
+    def has_term(self, term):
+        return self.get_node(term) is not None
+
+    def search(self, text):
         appearances = {}
         first = -1
         end = -1
@@ -115,7 +135,7 @@ class Trie:
                 b = ord(c)
                 if b > 255 or n[b].node is None:
                     break
-                elif n[b].node.terminal:
+                elif n[b].terminal:
                     if first < 0:
                         first = i
                         end = i + j
