@@ -3,6 +3,7 @@ import './Committee.css';
 
 function Committee({ committee, onDelete }) {
   const [isHidden, setIsHidden] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const formatTitle = (title, url) => {
     if (title) return title;
@@ -68,6 +69,11 @@ function Committee({ committee, onDelete }) {
     setIsHidden(true);
   };
 
+  const toggleExpand = (e) => {
+    e.preventDefault();
+    setIsExpanded(!isExpanded);
+  };
+
   // If hidden, dont render.
   if (isHidden) {
     return null;
@@ -76,33 +82,40 @@ function Committee({ committee, onDelete }) {
   return (
     <div className="Committee">
       <div className="committee-content">
-        <a href={committee.url} target="_blank" rel="noopener noreferrer" className='committee-url'>
+        <div className="committee-header" onClick={toggleExpand}>
           <h2 className="committee-title">
             {formatTitle(committee.title, committee.url)}
           </h2>
-          <p className="committee-description">
-            <h2 className='p-5 text-xl'><b>{extractSubdomain(committee.url)}</b> - WWU Subdomain</h2>
-            <h2 className='p-5 text-xl'><b>Committee Summary</b></h2>
-            {committee.summary_before}
-            <b>{committee.summary_keyword}</b>
-            <h2 className='p-5 text-xl'><b>Committee Position Information</b></h2>
-            { committee.summary_after }
-            <h2 className='p-5 text-xl'><b>Committee Contact</b></h2>
-            {committee.summary_keyword}
-          </p>
-        </a>
-        <div className="committee-actions">
-          <button
-            onClick={handleHide}
-            className="hide-button">
-            HIDE
-          </button>
-          <button
-            onClick={handleDelete}
-            className="remove-button">
-            DELETE
-          </button>
         </div>
+        
+        {isExpanded && (
+          <div className="committee-details">
+            <a href={committee.url} target="_blank" rel="noopener noreferrer" className='committee-url'>
+              <p className="committee-description">
+                <h2 className='p-5 text-xl'><b>{extractSubdomain(committee.url)}</b> - WWU Subdomain</h2>
+                <h2 className='p-5 text-xl'><b>Committee Summary</b></h2>
+                {committee.summary_before}
+                <b>{committee.summary_keyword}</b>
+                <h2 className='p-5 text-xl'><b>Committee Position Keywords</b></h2>
+                {committee.summary_after}
+                <h2 className='p-5 text-xl'><b>Committee Contact</b></h2>
+                {committee.summary_keyword}
+              </p>
+            </a>
+            <div className="committee-actions">
+              <button
+                onClick={handleHide}
+                className="hide-button">
+                HIDE
+              </button>
+              <button
+                onClick={handleDelete}
+                className="remove-button">
+                DELETE
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
