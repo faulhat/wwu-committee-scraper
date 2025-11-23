@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: space-between;
   text-align: left;
-  width: 100%; /* Full width */
+  width: 48%; /* Full width */
   margin: 0 0 1rem 0; /* Adjusted margin */
   padding: 1rem; /* Optional padding inside */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow to give the lifted effect */
@@ -70,11 +70,14 @@
   text-decoration: none;
 }
 
+/* Add spacing between description and action buttons */
 .committee-actions {
-  display: inline-flex;      /* lay children out in one row */
-  align-items: Left;       /* vertically center if heights differ */
-  gap: 0.5rem;               /* space between the score and the link */
+  display: inline-flex;      
+  align-items: left;       
+  gap: 0.5rem;              
+  margin-top: 1.5rem; /* <-- this adds space above the buttons */
 }
+
 
 /* make sure nothing else forces a line-break */
 .confidence-score,
@@ -85,3 +88,52 @@
   margin: 0;
 }
 
+/* Make all buttons (including <a>) look identical, even on hover or focus */
+.hide-button,
+.remove-button,
+.link-button {
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  font-family: inherit;
+  display: inline-block;
+}
+
+.hide-button:hover,
+.remove-button:hover,
+.link-button:hover,
+.link-button:focus,
+.link-button:active {
+  background-color: #333; /* same hover darkening */
+  color: white;           /* prevents blue tint */
+  text-decoration: none;  /* remove underline or browser link effect */
+}
+
+
+
+.Committee.expanded {
+  width: 100% !important;
+}
+
+/* Make expanded content left-aligned with soft padding */
+.committee-content {
+  padding-left: 1.5rem;   /* soft left padding */
+  padding-right: 1.5rem;  /* keep it balanced */
+  text-align: left !important;
+}
+
+/* Override your centered description */
+.committee-description {
+  text-align: left !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  max-width: none !important; /* remove the narrow 35ch limit */
+  padding-left: 0.5rem;       /* gentle left indent */
+}

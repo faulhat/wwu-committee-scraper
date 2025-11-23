@@ -6,11 +6,11 @@ import Subheader from '../Subheader/Subheader';
 import { Toaster } from 'react-hot-toast';
 import './App.css';
 import gif from '../../assets/oldmain.gif';
-import img2 from '../../assets/img2.png';
-import img3 from '../../assets/aa.png';
-import img4 from '../../assets/a.png';
-import img5 from '../../assets/aaa.png';
-import img6 from '../../assets/aaaa.png';
+import img2 from '../../assets/wwuheader.png';
+import img3 from '../../assets/mywestern.png';
+//import img4 from '../../assets/a.png';
+import img5 from '../../assets/apply.png';
+import img6 from '../../assets/give.png';
 
 function App() {
   const [committees, setCommittees] = useState([]);
@@ -50,9 +50,6 @@ function App() {
           </a>
           <a href="https://mywestern.wwu.edu/" target="_blank" rel="noopener noreferrer">
             <img src={img3} alt="MyWestern Icon" className="header-icon" />
-          </a>
-          <a href="https://search.wwu.edu/?q=%20site%3Amywestern.wwu.edu" target="_blank" rel="noopener noreferrer">
-            <img src={img4} alt="Search Icon" className="header-icon" />
           </a>
         </div>
       </h1>

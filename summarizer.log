@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/dylanpugh/Desktop/WWU/RA-HFA/wwu-committee-scraper/committee_scraper/src/__main__.py", line 4, in <module>
+    from scraper import Scraper
+  File "/Users/dylanpugh/Desktop/WWU/RA-HFA/wwu-committee-scraper/committee_scraper/src/scraper.py", line 8, in <module>
+    from google import genai
+ModuleNotFoundError: No module named 'google'
+[0;31mSummarization terminated[0m
