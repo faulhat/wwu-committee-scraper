@@ -1,3 +1,4 @@
+/* Your CommitteeList layout */
 .CommitteeList {
   display: flex;
   flex-wrap: wrap;   /* allow 2 per row */
@@ -7,19 +8,75 @@
   justify-content: center; /* center 2-column grid */
 }
 
-
 .committee-link {
   color: #0066cc;
   text-decoration: underline;
+}
+
+/* Search bar container */
+.search-container {
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 40px 12px 16px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+/* Clear button */
+.clear-search-button {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 20px;
+  line-height: 1;
   cursor: pointer;
-  margin-left: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
 }
 
-.committee-link:hover {
-  text-decoration: none;
+.clear-search-button:hover {
+  background: #5a6268;
 }
 
-.committee-item {
-  margin-bottom: 8px;
-  line-height: 1.5;
+.search-results-info {
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #495057;
+}
+
+.no-committees {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+  font-size: 18px;
 }

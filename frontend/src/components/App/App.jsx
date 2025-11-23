@@ -1,5 +1,5 @@
 // src/App.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import CommitteeList from '../CommitteeList/CommitteeList';
 import Footer from '../Footer/Footer';
 import Subheader from '../Subheader/Subheader';
@@ -16,6 +16,7 @@ function App() {
   const [committees, setCommittees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(6);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchCommittees = async () => {
@@ -29,13 +30,53 @@ function App() {
         setLoading(false);
       }
     };
-
     fetchCommittees();
   }, []);
+
+  const filteredCommittees = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return committees;
+    }
+
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    
+    return committees.filter(committee => {
+      const title = committee.title?.toLowerCase() || '';
+      const url = committee.url?.toLowerCase() || '';
+      const summaryBefore = committee.summary_before?.toLowerCase() || '';
+      const summaryKeyword = committee.summary_keyword?.toLowerCase() || '';
+      const summaryAfter = committee.summary_after?.toLowerCase() || '';
+      let subdomain = '';
+      try {
+        const urlObject = new URL(committee.url);
+        const hostname = urlObject.hostname;
+        const parts = hostname.split('.');
+        if (parts.length >= 3) {
+          subdomain = parts.slice(0, -2).join('.').toLowerCase();
+        }
+      } catch (error) {
+        console.log("error subdomain search");
+      }
+      return (
+        title.includes(lowerSearchTerm) ||
+        url.includes(lowerSearchTerm) ||
+        summaryBefore.includes(lowerSearchTerm) ||
+        summaryKeyword.includes(lowerSearchTerm) ||
+        summaryAfter.includes(lowerSearchTerm) ||
+        subdomain.includes(lowerSearchTerm)
+      );
+    });
+  }, [committees, searchTerm]);
 
   const handleLoadMore = () => {
     setVisibleCount(prev => prev + 10);
   };
+
+  useEffect(() => {
+    setVisibleCount(10);
+  }, [searchTerm]);
+
+  const visibleCommittees = filteredCommittees.slice(0, visibleCount);
 
   return (
     <div className="App">
@@ -53,35 +94,48 @@ function App() {
           </a>
         </div>
       </h1>
-
       <Subheader />
-
       <div className="image-container">
         <img src={gif} alt="Western Washington University" className="gif" />
       </div>
-
-
-      <h2 className="committee-main-title">WWU Student Committees
-      </h2>
+      <h2 className="committee-main-title">WWU Student Committees</h2>
       
       {loading ? (
         <div className="loading-message">Loading committees...</div>
       ) : (
         <>
-          <CommitteeList committees={committees.slice(0, visibleCount)} />
-
-          {visibleCount < committees.length && (
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search all committees by name, subdomain, or content..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+          </div>
+          {searchTerm && (
+            <div className="search-results-info">
+              Found {filteredCommittees.length} committee{filteredCommittees.length !== 1 ? 's' : ''} 
+              {filteredCommittees.length > 0 && ` (showing ${visibleCommittees.length})`}
+            </div>
+          )}
+          <CommitteeList committees={visibleCommittees} />
+          {visibleCount < filteredCommittees.length && (
             <div className="load-more-container">
               <button
                 className="load-more-button"
                 onClick={handleLoadMore}>
-                Load More
+                Load (10) More ({filteredCommittees.length - visibleCount} remaining)
               </button>
+            </div>
+          )}
+          {visibleCommittees.length === 0 && searchTerm && (
+            <div className="no-results-message">
+              No committees found matching "{searchTerm}"
             </div>
           )}
         </>
       )}
-
       <Toaster position="top-center" reverseOrder={false} />
       <Footer />
     </div>

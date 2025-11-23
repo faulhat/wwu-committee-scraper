@@ -10,7 +10,7 @@ function CommitteeList({ committees }) {
           <Committee key={index} committee={committee} />
         ))
       ) : (
-        <div className="no-committees">No committees found in this category</div>
+        <div className="no-committees">No committees found</div>
       )}
     </div>
   );

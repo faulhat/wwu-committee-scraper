@@ -61,18 +61,16 @@ function Committee({ committee, onDelete }) {
 
   return (
     <div className={`Committee ${isExpanded ? "expanded" : ""}`}>
-
-      
-      {/* TITLE ONLY expands/collapses – not a link */}
+      {/* TITLE ONLY expands/collapses */}
       <div className="committee-title-container" onClick={toggleExpand}>
         <h2 className="committee-title">{formatTitle(committee.title, committee.url)}</h2>
       </div>
 
       {isExpanded && (
         <div className="committee-content">
-
           <div className="committee-description">
             <h2 className='p-5 text-xl'><b>{extractSubdomain(committee.url)}</b> - WWU Subdomain</h2>
+
             <h2 className='p-5 text-xl'><b>Committee Summary</b></h2>
             {committee.summary_before}
             <b>{committee.summary_keyword}</b>
@@ -84,12 +82,10 @@ function Committee({ committee, onDelete }) {
             {committee.summary_keyword}
           </div>
 
-          {/* ACTION BUTTONS – only “Visit Site” goes to URL */}
           <div className="committee-actions">
             <button onClick={handleHide} className="hide-button">HIDE</button>
             <button onClick={handleDelete} className="remove-button">DELETE</button>
 
-            {/* This is the ONLY element that sends user to the committee URL */}
             <a
               href={committee.url}
               target="_blank"
@@ -100,7 +96,6 @@ function Committee({ committee, onDelete }) {
               VISIT SITE
             </a>
           </div>
-
         </div>
       )}
     </div>

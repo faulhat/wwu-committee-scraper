@@ -137,3 +137,12 @@
   max-width: none !important; /* remove the narrow 35ch limit */
   padding-left: 0.5rem;       /* gentle left indent */
 }
+/* Style the search input text color */
+.search-input {
+  color: #333; /* dark gray text */
+}
+
+/* Optional: placeholder text color */
+.search-input::placeholder {
+  color: #999; /* light gray placeholder */
+}
