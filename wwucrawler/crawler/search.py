@@ -17,11 +17,10 @@ class SearchRes:
 #  Keywords on the first priority tier out of n will count for n points each,
 #  those on the second tier count for n-1, and so on.
 def tiered_search(text, keyword_list):
-    score = 0
-    result = search(text, keyword_list[0])
+    result = Trie(keyword_list[0]).search(text)
     result.total *= len(keyword_list)
     for i, tier in enumerate(keyword_list[1:]):
-        t_res = search(text, tier)
+        t_res = Trie(tier).search(text)
         for term, num in t_res.appearances.items():
             if term in result.appearances:
                 result.appearances[term] += num
@@ -37,6 +36,7 @@ def tiered_search(text, keyword_list):
     return result
 
 
+"""
 # Search a document for given keywords
 # TODO:  Make this use a trie
 def search(text, terms):
@@ -46,7 +46,7 @@ def search(text, terms):
     total = 0
 
     for term in terms:
-        pattern = re.compile(f"(?<!\w){term}(?!\w)")
+        pattern = re.compile(f"(?<!\\w){term}(?!\\w)")
         cur = 0
         while match := pattern.search(text, cur):
             appearances[term] = 1 + appearances.get(term, 0)
@@ -58,7 +58,7 @@ def search(text, terms):
             total += 1
 
     return SearchRes(appearances, first, end, total)
-
+"""
 
 class TrieNode:
     def __init__(self, terminal=False, term=None, occurrences=0, node=None):
@@ -112,12 +112,14 @@ class Trie:
             b = ord(c)
             if b > 255:
                 return None
-            elif i == len(term) - 1:
+            
+            if i == len(term) - 1:
                 return n[b] if n[b].terminal else None
-            elif n[b].node is None:
+            
+            if n[b].node is None:
                 return None
-            else:
-                n = n[b].node
+            
+            n = n[b].node
 
     def has_term(self, term):
         return self.get_node(term) is not None
@@ -133,15 +135,19 @@ class Trie:
             n = self.root
             for j, c in enumerate(text[i:]):
                 b = ord(c)
-                if b > 255 or n[b].node is None:
+                if b > 255:
                     break
-                elif n[b].terminal:
+
+                if n[b].terminal:
                     if first < 0:
                         first = i
-                        end = i + j
+                        end = i + j + 1
 
-                    appearances[n[b].node.term] = 1 + appearances.get(n[b].node.term, 0)
+                    appearances[n[b].term] = 1 + appearances.get(n[b].term, 0)
                     total += 1
+                
+                if n[b].node is None:
+                    break
 
                 n = n[b].node
 
