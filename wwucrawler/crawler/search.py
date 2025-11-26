@@ -36,30 +36,6 @@ def tiered_search(text, keyword_tries):
     return result
 
 
-"""
-# Search a document for given keywords
-# TODO:  Make this use a trie
-def search(text, terms):
-    appearances = {}
-    first = -1
-    end = -1
-    total = 0
-
-    for term in terms:
-        pattern = re.compile(f"(?<!\\w){term}(?!\\w)")
-        cur = 0
-        while match := pattern.search(text, cur):
-            appearances[term] = 1 + appearances.get(term, 0)
-            if first < 0 or match.end() < first:
-                first = match.start()
-                end = match.end()
-
-            cur = match.end()
-            total += 1
-
-    return SearchRes(appearances, first, end, total)
-"""
-
 class TrieNode:
     def __init__(self, terminal=False, term=None, occurrences=0, node=None):
         self.terminal = terminal
@@ -87,7 +63,6 @@ class Trie:
             if b.terminal:
                 print(f"{t}, {b.term}")
 
-
     def add_term(self, term):
         for c in term:
             if ord(c) > 255:
@@ -112,13 +87,13 @@ class Trie:
             b = ord(c)
             if b > 255:
                 return None
-            
+
             if i == len(term) - 1:
                 return n[b] if n[b].terminal else None
-            
+
             if n[b].node is None:
                 return None
-            
+
             n = n[b].node
 
     def has_term(self, term):
@@ -145,7 +120,7 @@ class Trie:
 
                     appearances[n[b].term] = 1 + appearances.get(n[b].term, 0)
                     total += 1
-                
+
                 if n[b].node is None:
                     break
 

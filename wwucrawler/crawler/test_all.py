@@ -27,27 +27,6 @@ def test_add_page():
     assert rows[0][2] == 0
 
 
-"""
-def test_search():
-    expected_appearances = {
-        "vast": 1,
-        "inhabit": 1,
-        "portion": 1,
-        "the": 5,
-    }
-
-    with open("testdata/sample.html", "r") as f:
-        text = f.read()
-        soup = BeautifulSoup(text, "html.parser")
-        res = search(soup.text, expected_appearances.keys())
-        for term, num in expected_appearances.items():
-            assert term in res.appearances
-            assert res.appearances[term] == num
-
-        assert res.total == 8
-"""
-
-
 def test_trie():
     terms = ["a", "aa", "into", "in", "hero", "heroic"]
     t = Trie(terms)
@@ -90,7 +69,8 @@ def test_tiered_search():
     with open("testdata/sample.html", "r") as f:
         text = f.read()
         soup = BeautifulSoup(text, "html.parser")
-        res = tiered_search(soup.text, keywords)
+        keyword_tries = [Trie(tier) for tier in keywords]
+        res = tiered_search(soup.text, keyword_tries)
         for term, num in expected_appearances.items():
             assert term in res.appearances
             assert res.appearances[term] == num
@@ -112,7 +92,8 @@ def test_summarize():
         soup = BeautifulSoup(f.read(), "html.parser")
         title = soup.title.string
         text = soup.text
-        res = tiered_search(text, keywords)
+        keyword_tries = [Trie(tier) for tier in keywords]
+        res = tiered_search(soup.text, keyword_tries)
         test_db.add_page(fname, title, res, res.total, text)
 
         cur = test_db.con.cursor()
