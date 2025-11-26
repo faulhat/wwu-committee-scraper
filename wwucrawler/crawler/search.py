@@ -16,11 +16,11 @@ class SearchRes:
 # Search with keywords of varying priority
 #  Keywords on the first priority tier out of n will count for n points each,
 #  those on the second tier count for n-1, and so on.
-def tiered_search(text, keyword_list):
-    result = Trie(keyword_list[0]).search(text)
-    result.total *= len(keyword_list)
-    for i, tier in enumerate(keyword_list[1:]):
-        t_res = Trie(tier).search(text)
+def tiered_search(text, keyword_tries):
+    result = keyword_tries[0].search(text)
+    result.total *= len(keyword_tries)
+    for i, tier in enumerate(keyword_tries[1:]):
+        t_res = tier.search(text)
         for term, num in t_res.appearances.items():
             if term in result.appearances:
                 result.appearances[term] += num
@@ -31,7 +31,7 @@ def tiered_search(text, keyword_list):
             result.first = t_res.first
             result.end = t_res.end
 
-        result.total += (len(keyword_list) - i - 1) * t_res.total
+        result.total += (len(keyword_tries) - i - 1) * t_res.total
 
     return result
 
