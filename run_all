@@ -9,9 +9,17 @@ if [ $? -eq 0 ]; then
     ./run &> ../summarizer.log &
     if [ $? -eq 0 ]; then
         echo 'Summarizer running! Do `tail -f summarizer.log` to see its progress.'
-        
-        cd ../flaskapp/
-        .env/bin/python app.py
+
+        cd ../frontend/
+        npm run dev &> ../frontend.log &
+        if [ $? -eq 0 ]; then
+            echo 'Frontend running! Do `tail -f frontend.log` to see its output.'
+
+            cd ../flaskapp/
+            .env/bin/python app.py
+        else
+            echo 'Failed to start frontend. Giving up...'
+        fi
     else
         echo 'Failed to start summarizer. Giving up...'
     fi

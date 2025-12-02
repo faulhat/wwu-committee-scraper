@@ -1,46 +1,57 @@
-/* Your CommitteeList layout */
+/* ======================= Committee List Layout ======================= */
+/* Main container for the committee items, displayed in a flexible 2-column grid */
 .CommitteeList {
   display: flex;
-  flex-wrap: wrap;   /* allow 2 per row */
-  gap: 1rem;
+  flex-wrap: wrap;   /* allow items to wrap onto a new row */
+  gap: 1rem;         /* spacing between items */
   width: 100%;
   padding: 0;
-  justify-content: center; /* center 2-column grid */
+  justify-content: center; /* center the 2-column grid horizontally */
 }
 
+/* ======================= Committee Links ======================= */
+/* Styles for clickable links inside the committee list */
 .committee-link {
   color: #0066cc;
   text-decoration: underline;
 }
 
-/* Search bar container */
+/* ======================= Search Bar Container ======================= */
+/* Wrapper for the search input and clear button */
 .search-container {
   position: relative;
   margin-bottom: 20px;
   width: 100%;
 }
 
+/* ======================= Search Input ======================= */
+/* Input field for typing committee search queries */
 .search-input {
   width: 100%;
-  padding: 12px 40px 12px 16px;
+  padding: 12px 40px 12px 16px; /* padding with space for clear button */
   font-size: 16px;
   border: 2px solid #ddd;
+  box-shadow: none;
   border-radius: 8px;
   outline: none;
   transition: border-color 0.3s ease;
   box-sizing: border-box;
 }
 
+/* Focus state for search input */
 .search-input:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  border-color: #a0a0a0; /* optional: keeps border highlight */
+  box-shadow: none;       /* remove the glow */
+  outline: none;          /* remove default browser outline */
 }
 
+/* Placeholder text style for search input */
 .search-input::placeholder {
   color: #999;
 }
 
-/* Clear button */
+/* ======================= Clear Search Button ======================= */
+/* Small circular button to clear the search field */
 .clear-search-button {
   position: absolute;
   right: 12px;
@@ -61,10 +72,13 @@
   transition: background-color 0.2s ease;
 }
 
+/* Hover effect for clear button */
 .clear-search-button:hover {
   background: #5a6268;
 }
 
+/* ======================= Search Results Info ======================= */
+/* Small info box showing search results or messages */
 .search-results-info {
   margin-bottom: 16px;
   padding: 8px 12px;
@@ -74,6 +88,8 @@
   color: #495057;
 }
 
+/* ======================= No Committees Message ======================= */
+/* Message displayed when no committees are found */
 .no-committees {
   text-align: center;
   padding: 40px 20px;

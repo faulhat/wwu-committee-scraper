@@ -1,20 +1,21 @@
 @import "tailwindcss";
 
-/* Define the Trueno font */
+/* ======================= Fonts ======================= */
 @font-face {
   font-family: 'Trueno';
   src: url('../../assets/fonts/TruenoBd.otf') format('opentype');
-  font-weight: 700; /* Bold weight */
+  font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Trueno';
   src: url('../../assets/fonts/TruenoBlk.otf') format('opentype');
-  font-weight: 700; /* Bold weight */
+  font-weight: 700;
   font-style: normal;
 }
 
+/* ======================= Root Container ======================= */
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -22,15 +23,18 @@
   text-align: center;
 }
 
+/* ======================= Logo / Animations ======================= */
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -50,6 +54,7 @@
   }
 }
 
+/* ======================= Generic Helpers ======================= */
 .card {
   padding: 2em;
 }
@@ -58,8 +63,7 @@
   color: #888;
 }
 
-/* Universal Styl/* Universal Styles */
-
+/* ======================= Global Base Styles ======================= */
 html {
   font-size: 18px;
   background-color: #ffffff !important;
@@ -67,7 +71,7 @@ html {
 
 @media only screen and (max-width: 560px) {
   html {
-    font-size: 15px;
+    font-size: 18px;
   }
 }
 
@@ -75,118 +79,15 @@ input:focus {
   outline: none;
 }
 
-/* Reusable Component - Image Container */
-
-.image-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
-  background: #000;
-}
-
-.image-container img {
-  width: 100%;
-}
-
-/* App Styles */
-
+/* ======================= App Wrapper ======================= */
 .App {
   font-family: 'Work Sans', sans-serif;
   position: relative;
-  align-items: center;      /* center all children horizontally */
-
-}
-
-/* --- Thicker top header (replace existing header rules) --- */
-h1 {
-  padding: 0;                  /* we control height explicitly */
-  margin: 0;
-  height: 100px;                /* <-- makes header thicker — change this value if you want more/less */
-  background-color: #003F87;   /* keep the WWU blue */
-  font-family: Poppins, sans-serif;
-  font-size: 1.6rem;           /* adjust text size if needed */
-  color: #fff;
-  width: 100%;
-  display: flex;
-  align-items: center;         /* vertical center for inline content fallback */
-  justify-content: flex-start; /* left-align content */
-  position: relative;          /* contains absolutely positioned children */
-  box-sizing: border-box;
-}
-
-/* Logo on the left — vertically centered inside larger header */
-.header-logo {
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 64px;   /* larger logo for thicker header; lower if too big */
-  width: auto;
-}
-
-/* Right-side small icons container */
-.header-right-images {
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  gap: 8px;
+  text-align: center;
   align-items: center;
 }
 
-/* Each right-side icon */
-.header-icon {
-  height: 48px;   /* slightly larger to match thicker header; tweak as desired */
-  width: auto;
-  display: block;
-}
-
-
-.header-logo {
-  position: absolute; /* Position the logo absolutely within the header */
-  left: 20px; /* Distance from the left edge */
-  top: 50%; /* Center vertically */
-  transform: translateY(-50%); /* Adjust for exact vertical centering */
-  height: 80px; /* Adjust the height of the logo */
-  width: auto; /* Maintain aspect ratio */
-}
-
-html {
-  font-size: 18px;
-}
-
-@media only screen and (max-width: 560px) {
-  html {
-    font-size: 15px;
-  }
-}
-
-input:focus {
-  outline: none;
-}
-
-/* Reusable Component - Image Container */
-
-.image-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
-  background: #000;
-}
-
-.image-container img {
-  width: 100%;
-}
-
-/* App Styles */
-
-.App {
-  font-family: 'Work Sans', sans-serif;
-}
-
+/* ======================= Header ======================= */
 h1 {
   padding: .66rem 0;
   text-align: center;
@@ -194,19 +95,62 @@ h1 {
   font-family: Poppins, sans-serif;
   font-size: 1.8rem;
   color: #fff;
+  margin: 0;
+  height: 100px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  box-sizing: border-box;
 }
 
-.App {
-  text-align: center;
+/* Header logo */
+.header-logo {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 80px;
+  width: auto;
 }
 
+/* Right-side icons container */
+.header-right-images {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 5px;
+}
+
+/* Individual header icons */
+.header-icon {
+  height: 20px;
+  width: auto;
+}
+
+/* ======================= Image Container ======================= */
+.image-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  background: #000;
+}
+
+.image-container img {
+  width: 100%;
+}
+
+/* ======================= Layout Sections ======================= */
 .full-page {
   width: 100%;
-  height: 100vh; /* Full viewport height */
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid #ccc; /* Optional: Add a border between businesses */
+  border-bottom: 1px solid #ccc;
 }
 
 .Business {
@@ -221,41 +165,30 @@ h1 {
   margin-top: 20px;
 }
 
-.Business-address, .Business-reviews {
+.Business-address,
+.Business-reviews {
   width: 45%;
 }
 
-
+/* ======================= Committee Title ======================= */
 .committee-main-title {
-  color: #003F87; /* Blue text */
-  font-size: 2rem; /* Large font size */
-  font-weight: 400; /* Bold text */
+  color: #003F87;
+  font-size: 2rem;
   font-weight: 900;
-  text-align: center; /* Center the title */
+  text-align: center;
   padding: 10px;
-  margin: 2rem 0 1rem 0; /* Add space above and below the title */
+  margin: 2rem 0 1rem 0;
   font-family: Trueno, sans-serif;
   border-radius: 10px;
-  background-color: hsl(0, 0%, 98%); /* Light background for the committee card */
+  background-color: hsl(0, 0%, 90);
 }
 
-/* Styles for the right images container */
-.header-right-images {
-  position: absolute; /* Position the container absolutely within the header */
-  right: 20px; /* Distance from the right edge */
-  top: 50%; /* Center vertically */
-  transform: translateY(-50%); /* Adjust for exact vertical centering */
-  display: flex; /* Display images in a row */
-  gap: 5px; /* Space between images */
-}
-
-/* Styles for each individual image */
-.header-icon {
-  height: 20px; /* Adjust the height of the images */
-  width: auto; /* Maintain aspect ratio */
-}
-
+/* ======================= Buttons ======================= */
 .load-more-button {
   margin: 25px;
 }
 
+
+html {
+  zoom: 1.40;  
+}

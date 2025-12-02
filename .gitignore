@@ -4,3 +4,5 @@
 .DS_STORE
 pages.db
 crawler.log
+frontend.log
+output.txt
