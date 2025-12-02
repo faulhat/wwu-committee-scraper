@@ -5,45 +5,59 @@ function Committee({ committee, onDelete }) {
   const [isHidden, setIsHidden] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
+  /* -------------------- helpers -------------------- */
+
+  const toTitleCase = (str) =>
+    str
+      ?.toLowerCase()
+      .replace(/\b\w/g, (l) => l.toUpperCase());
+
   const formatTitle = (title, url) => {
-    if (title) return title;
-    const parts = url.split('/').filter(part => part);
-    return parts[parts.length - 1]
-      .replace(/-/g, ' ')
-      .replace(/\b\w/g, l => l.toUpperCase());
+    if (title) return toTitleCase(title);
+
+    const parts = url.split('/').filter(Boolean);
+    return toTitleCase(
+      parts[parts.length - 1].replace(/-/g, ' ')
+    );
   };
 
-  function extractSubdomain(url) {
+    const extractSubdomain = (url) => {
     try {
       const urlObject = new URL(url);
       const hostname = urlObject.hostname;
-      if (/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(hostname)) return null;
 
       const parts = hostname.split('.');
       if (parts.length < 3) return null;
 
-      const potentialSubdomainParts = parts.slice(0, -2);
-      return potentialSubdomainParts.length > 0 ? potentialSubdomainParts.join('.') : null;
-    } catch (error) {
-      console.error("Invalid URL:", error);
+      return parts.slice(0, -2).join('.').toUpperCase();
+    } catch {
       return null;
     }
-  }
+  };
+
+
+  /* -------------------- actions -------------------- */
 
   const handleDelete = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!window.confirm('Confirm you want to permanently delete this committee?')) return;
+
+    if (!window.confirm('Delete this committee permanently?')) return;
 
     try {
-      const response = await fetch(`/delete/pages/url?url=${encodeURIComponent(committee.url)}`, { method: 'DELETE' });
-      if (response.ok) {
+      const res = await fetch(
+        `/delete/pages/url?url=${encodeURIComponent(committee.url)}`,
+        { method: 'DELETE' }
+      );
+
+      if (res.ok) {
         setIsHidden(true);
-        if (onDelete) setTimeout(() => onDelete(committee.url), 300);
-      } else alert('Failed to delete page. Please try again.');
-    } catch (error) {
-      console.error('Error deleting page:', error);
-      alert('Error deleting page. Please try again.');
+        onDelete && onDelete(committee.url);
+      } else {
+        alert('Delete failed.');
+      }
+    } catch {
+      alert('Error deleting page.');
     }
   };
 
@@ -53,38 +67,55 @@ function Committee({ committee, onDelete }) {
     setIsHidden(true);
   };
 
-  const toggleExpand = () => {
-    setIsExpanded(prev => !prev);
-  };
-
   if (isHidden) return null;
 
+  /* -------------------- render -------------------- */
+
   return (
-    <div className={`Committee ${isExpanded ? "expanded" : ""}`}>
-      {/* TITLE ONLY expands/collapses */}
-      <div className="committee-title-container" onClick={toggleExpand}>
-        <h2 className="committee-title">{formatTitle(committee.title, committee.url)}</h2>
+    <div className={`Committee ${isExpanded ? 'expanded' : ''}`}>
+      {/* Title bar (click to expand) */}
+      <div
+        className="committee-title-container"
+        onClick={() => setIsExpanded((prev) => !prev)}
+      >
+        <h2 className="committee-title">
+          {formatTitle(committee.title, committee.url)}
+        </h2>
       </div>
 
       {isExpanded && (
         <div className="committee-content">
+          {/* Info sections */}
           <div className="committee-description">
-            <h2 className='p-5 text-xl'><b>{extractSubdomain(committee.url)}</b> - WWU Subdomain</h2>
+            <div className="committee-section">
+              <h3>Subdomain</h3>
+              <p>{extractSubdomain(committee.url) || 'Not Available'}</p>
+            </div>
 
-            <h2 className='p-5 text-xl'><b>Committee Summary</b></h2>
-            {committee.summary_before}
-            <b>{committee.summary_keyword}</b>
+            <div className="committee-section">
+              <h3>Committee Summary</h3>
+              <p>
+                {committee.summary_before}{' '}
+                <strong>{committee.summary_keyword}</strong>{' '}
+                {committee.summary_after}
+              </p>
+            </div>
 
-            <h2 className='p-5 text-xl'><b>Committee Position Information</b></h2>
-            {committee.summary_after}
-
-            <h2 className='p-5 text-xl'><b>Committee Contact</b></h2>
-            {committee.summary_keyword}
+            <div className="committee-section">
+              <h3>Key Term / Contact</h3>
+              <p>{committee.summary_keyword || 'Not Available'}</p>
+            </div>
           </div>
 
+          {/* Actions */}
           <div className="committee-actions">
-            <button onClick={handleHide} className="hide-button">HIDE</button>
-            <button onClick={handleDelete} className="remove-button">DELETE</button>
+            <button onClick={handleHide} className="hide-button">
+              Hide
+            </button>
+
+            <button onClick={handleDelete} className="remove-button">
+              Delete
+            </button>
 
             <a
               href={committee.url}
@@ -93,7 +124,7 @@ function Committee({ committee, onDelete }) {
               className="link-button"
               onClick={(e) => e.stopPropagation()}
             >
-              VISIT SITE
+              Visit Website
             </a>
           </div>
         </div>

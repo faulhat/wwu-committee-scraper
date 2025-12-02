@@ -159,3 +159,32 @@
 .search-input::placeholder {
   color: #999; /* Light gray placeholder */
 }
+
+/* ======================= Expanded Content Sections ======================= */
+
+.committee-title-container {
+  cursor: pointer;
+}
+
+.committee-title-container:hover .committee-title {
+  text-decoration: underline;
+}
+
+.committee-section {
+  margin-bottom: 1.25rem;
+}
+
+.committee-section h3 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #555;
+  margin-bottom: 0.25rem;
+}
+
+.committee-section p {
+  margin: 0;
+  line-height: 1.5;
+  color: #222;
+}
