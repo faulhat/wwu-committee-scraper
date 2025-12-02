@@ -8,7 +8,6 @@ import './App.css';
 import gif from '../../assets/oldmain.gif';
 import img2 from '../../assets/wwuheader.png';
 import img3 from '../../assets/mywestern.png';
-//import img4 from '../../assets/a.png';
 import img5 from '../../assets/apply.png';
 import img6 from '../../assets/give.png';
 

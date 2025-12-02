@@ -5,7 +5,7 @@ In the project root directory, do:
 ./setup_all && ./run_all
 ```
 
-This will start a local server on port 5000, run the web crawler in the background and run the frontend, it will say " * Running on http://---.0.0.1:5000" To check on the crawler's progress, do:
+This will start a local server on port 5000, run the web crawler in the background and run the frontend, it will say " * Running on http://---.0.0.1:----" To check on the crawler's progress, do:
 ```
 tail -f crawler.log
 ```
