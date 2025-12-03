@@ -2,7 +2,7 @@ import requests, sys, time
 from bs4 import BeautifulSoup
 from urls import *
 from pages_db import PagesDB
-from search import tiered_search
+from search import tiered_search, Trie
 from multiprocessing import Process, JoinableQueue, Manager, Event, Value, Lock
 from fingerprints import avg_set_distance
 
@@ -31,6 +31,7 @@ class Crawler:
         self.db_path = db_path
         self.root = root
         self.keywords = keywords
+        self.keyword_tries = [Trie(tier) for tier in keywords]
         self.bounded = bounded
         self.max_depth = max_depth
         self.black_subdomains = set(black_subdomains)
@@ -120,7 +121,7 @@ class Crawler:
                     title = soup.title.string if soup.title else None
 
                     text = re.sub(r"\s+", " ", soup.text.strip())
-                    terms = tiered_search(text, self.keywords)
+                    terms = tiered_search(text, self.keyword_tries)
                     score = terms.total
 
                     # Boost documents which are closer to our canonical set

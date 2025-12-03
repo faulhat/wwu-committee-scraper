@@ -100,6 +100,7 @@ function App() {
       <h2 className="committee-main-title">WWU Student Committees</h2>
       
       {loading ? (
+        // When it takes a second it throws a loading message
         <div className="loading-message">Loading committees...</div>
       ) : (
         <>

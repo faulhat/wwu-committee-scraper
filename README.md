@@ -6,6 +6,7 @@ In the project root directory, do:
 ```
 
 This will start a local server on port 5000, run the web crawler in the background and run the frontend, it will say " * Running on http://---.0.0.1:----" To check on the crawler's progress, do:
+This will start a local server on port 5000 and run the web crawler in the background. To check on the crawler's progress, do:
 ```
 tail -f crawler.log
 ```
@@ -44,6 +45,7 @@ Kyle Downing
 To ensure the smooth operation of the summarizer program across a wide range of enviorments, the summarizer will use Google Gemini's GenAi API. This API offers a free tier, and will allow the program to make API requests with a strict limit. The limit will be enforced and implemented within the program, to avoid sending multiple requests that may result in an error.
 
 - [Google GenAI Docs](https://ai.google.dev/gemini-api/docs)
+- [Install Ollama](https://ollama.com/download)
 
 If you need, read the documentation to understand how to use the API to generate responses. The document covers the differnet models offered, how to initialize them and query them, as well as all other useful information.
 

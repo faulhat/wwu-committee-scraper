@@ -58,16 +58,6 @@ def dist(subpath):
         return send_file(
             os.path.join(os.path.dirname(__file__), "../frontend/dist/", subpath)
         )
-    
-@app.route("/delete/pages/url", methods=["DELETE"])
-def delete_page():
-    pageurl = request.args.get('url')
-    if os.path.isfile("../pages.db"):
-        with connect("../pages.db") as db_con:
-            cursor = db_con.cursor()
-            cursor.execute("DELETE FROM pages WHERE url = ?", (pageurl,))
-            cursor.close()
-    return {'success': True}
 
 # Displaying the database to the front end, and to the localhost server created by the flaskapp.
 def full_pages_table(cur: Cursor) -> list[dict[str, Any]]:
@@ -97,7 +87,7 @@ def dump_to_excel(db_path, excel_path):
    table_name = "pages"
    try:
        # Only return the following attributes:
-       df = pd.read_sql_query(f"SELECT * FROM pages;", conn)
+       df = pd.read_sql_query(f"SELECT url, title, score, terms, retrieved FROM {table_name};", conn)
    except Exception as e:
        print(f"Error reading table '{table_name}': {e}")
        conn.close()
