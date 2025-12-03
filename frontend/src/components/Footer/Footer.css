@@ -1,58 +1,71 @@
 /* ======================= Footer Container ======================= */
-/* Main footer wrapper */
 .footer {
-  background-color: #003F87; /* Blue background */
-  color: white; /* White text */
-  padding: 2em 1rem; /* Padding for spacing */
-  font-size: 15px; /* Smaller font size */
-  font-weight: bold; /* Bold text */
-  text-align: center; /* Center-align text */
+  background-color: #003F87;
+  color: white;
+  padding: 2em 1rem;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
   display: flex;
-  flex-direction: column; /* Stack content vertically */
-  align-items: center; /* Center content horizontally */
-  justify-content: center; /* Center content vertically */
-  min-height: 150px; /* Minimum height for footer */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 150px;
 }
 
 /* ======================= Footer Content Wrapper ======================= */
-/* Container for footer links and text */
 .footer-content {
   display: flex;
-  flex-wrap: wrap; /* Allow items to wrap on smaller screens */
-  gap: 1px; /* Space between links */
-  margin-top: 0; /* Remove extra top margin */
+  flex-wrap: wrap;
+  gap: 1px;
+  margin-top: 0;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ======================= Footer Links ======================= */
-/* Styling for individual footer links */
 .footer-link {
-  color: white; /* White text */
-  /* text-decoration: underline; /* Optional underline */
-  text-transform: uppercase; /* Convert text to uppercase */
-  transition: color 0.3s ease; /* Smooth hover effect */
-  transform: scale(0.8); /* Slightly shrink text */
-  display: inline-block; /* Ensure transform works correctly */
-  font-weight: bold; /* Bold text */
+  color: white;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+  transform: scale(0.8);
+  display: inline-block;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
-/* Hover effect for footer links */
+/* Hover */
 .footer-link:hover {
-  color: #BAD80A; /* Gold color on hover */
+  color: #BAD80A;
+}
+
+/* ======================= Export Row ======================= */
+.footer-export {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Export link — SAME SIZE as others */
+.footer-export-link {
+  transform: scale(0.8);   /* match .footer-link */
+  font-size: inherit;     /* inherit footer size */
+  margin: 0 2px;
 }
 
 /* ======================= Footer Image Container ======================= */
-/* Wrapper for footer images */
 .footer-image-container {
   display: flex;
-  justify-content: center; /* Center images horizontally */
-  margin-top: 5px; /* Space above image */
-  margin-bottom: 15px; /* Space below image */
+  justify-content: center;
+  margin-top: 5px;
+  margin-bottom: 15px;
 }
 
 /* ======================= Footer Images ======================= */
-/* Style for images inside the footer */
 .footer-image {
-  max-width: 80%; /* Prevent image from overflowing container */
-  height: auto; /* Maintain aspect ratio */
-  width: 150px; /* Fixed width, adjust as needed */
+  max-width: 80%;
+  height: auto;
+  width: 150px;
 }
